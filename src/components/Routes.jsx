@@ -7,8 +7,8 @@ import { Dashboard, Customers } from '../pages'
 const Routes = () => {
   return (
     <Switch>
-      <Route path={"/"} component={Dashboard} />
-      <Route path={"/customers"} component={Customers} />
+      <Route path={"/"} exact component={Dashboard} />
+      <Route path={"/customers"} exact component={Customers} />
     </Switch>
   )
 }
