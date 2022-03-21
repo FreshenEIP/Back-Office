@@ -1,2 +1,2 @@
-export { default as Layout } from "./Layout.jsx"
 export { default as Routes } from "./Routes.jsx"
+export { default as Sidebar } from "./Sidebar.jsx"
