@@ -2,6 +2,8 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { Routes, Sidebar } from "./components"
 
+import './assets/css/layout.css'
+
 const App = () => {
   return (
     <Route render={(props) => (
