@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import { Routes, Sidebar } from "./components"
 
 import './assets/css/layout.css'
+import './assets/css/sidebar.css'
 
 const App = () => {
   return (
