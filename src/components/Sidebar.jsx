@@ -7,7 +7,7 @@ import SidebardItem from './SidebardItem'
 
 const Sidebar = props => {
 
-  const activeItem = sidebar_items.find
+  const activeItem = sidebar_items.findIndex(item => item.route === props.location.pathname)
 
   return (
     <div className={"sidebar"}>
@@ -20,7 +20,7 @@ const Sidebar = props => {
             <SidebardItem
               title={item.display_name}
               icon={item.icon}
-              active={key === activeItem}
+              active={index === activeItem}
             />
           </Link>
         ))
