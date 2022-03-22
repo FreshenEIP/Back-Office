@@ -1,9 +1,10 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { Routes, Sidebar } from "./components"
+import { Routes, Sidebar, TopNav } from "./components"
 
 import './assets/css/layout.css'
 import './assets/css/sidebar.css'
+import './assets/css/topnav.css'
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <div className={"layout"}>
         <Sidebar {...props} />
         <div className={"layout__content"}>
+          <TopNav />
           <div className={"layout__content-main"}>
             <Routes />
           </div>
