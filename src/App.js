@@ -6,6 +6,7 @@ import './assets/css/layout.css'
 import './assets/css/sidebar.css'
 import './assets/css/topnav.css'
 import './assets/css/dropdown.css'
+import './assets/css/statuscard.css'
 
 const App = () => {
   return (

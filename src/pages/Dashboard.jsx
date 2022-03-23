@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { StatusCard } from '../components'
+
 import statusCard from "../assets/JsonData/status_card.json"
 
 const Dashboard = () => {
@@ -13,6 +15,11 @@ const Dashboard = () => {
               statusCard.map((item, index) => (
                 <div className="col-6">
                   {item.title}
+                  <StatusCard
+                    icon={item.icon}
+                    count={item.count}
+                    title={item.title}
+                  />
                 </div>
               ))
             }
