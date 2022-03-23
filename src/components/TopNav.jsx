@@ -1,13 +1,31 @@
 import React from 'react'
-import Dropdown from './Dropdown'
-
-import notifications from "../assets/JsonData/notification.json"
 import { Link } from 'react-router-dom'
+
+import Dropdown from './Dropdown'
+import userImage from "../assets/images/user_image.jpg"
+import notifications from "../assets/JsonData/notification.json"
+import userMenu from "../assets/JsonData/user_menus.json"
+
+const currentUser = {
+  displayName: "Alexis Fabarez",
+  image: userImage
+}
 
 const renderNotificationItem = (item, index) => (
   <div className="notification-item" key={index}>
     <i className={item.icon}></i>
     <span>{item.content}</span>
+  </div>
+)
+
+const renderUserToggle = (user) => (
+  <div className="topnav__right-user">
+    <div className="topnav__right-user__image">
+      <img src={user.image} alt=""/>
+    </div>
+    <div className="topnav__right-user__name">
+      {user.displayName}
+    </div>
   </div>
 )
 
@@ -21,7 +39,7 @@ const TopNav = () => {
       <div className="topnav__right">
         <div className="topnav__right-item">
           <Dropdown
-            icon='bx bx-user'
+            customToggle={() => renderUserToggle(currentUser)}
           />
         </div>
         <div className="topnav__right-item">
