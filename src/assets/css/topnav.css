@@ -67,6 +67,7 @@
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
+  margin-right: 10px;
 }
 
 .topnav__right-user__image > img {
