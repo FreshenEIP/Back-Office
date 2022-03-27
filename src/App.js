@@ -8,6 +8,7 @@ import './assets/css/topnav.css'
 import './assets/css/dropdown.css'
 import './assets/css/statuscard.css'
 import './assets/css/table.css'
+import './assets/css/badge.css'
 
 const App = () => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { StatusCard, Table } from '../components'
+import { Badge, StatusCard, Table } from '../components'
 
 import statusCard from "../assets/JsonData/status_card.json"
 
@@ -15,7 +15,7 @@ const tableHead = {
     "user",
     "reported by",
     "date",
-    "reports type",
+    "priority",
     "actions"
   ]
 }
@@ -33,9 +33,17 @@ const latestReportsBody = [
     "username": "john doe",
     "by": "jane doe",
     "date": "28/03/2022",
-    "type": "comments",
+    "type": "low",
   }
 ]
+
+const reportType = {
+  "very high": "danger",
+  "high": "warning",
+  "normal": "success",
+  "low": "secondary",
+  "very low": "primary"
+}
 
 const renderHead = (item, index) => (
   <th key={index}>{item}</th>
@@ -55,7 +63,7 @@ const renderReportsBody = (item, index) => (
     <td>{item.by}</td>
     <td>{item.date}</td>
     <td>
-      <span>{item.type}</span>
+      <Badge type={reportType[item.type]} content={item.type}/>
     </td>
     <td>Actions</td>
   </tr>
