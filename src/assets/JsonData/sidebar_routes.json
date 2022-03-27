@@ -8,5 +8,10 @@
         "display_name": "Customers",
         "route": "/customers",
         "icon": "bx bx-user-pin"
+    },
+    {
+        "display_name": "Reports",
+        "route": "/reports",
+        "icon": "bx bxs-report"
     }
 ]
