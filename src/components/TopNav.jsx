@@ -55,7 +55,7 @@ const TopNav = () => {
         </div>
         <div className="topnav__right-item">
           <Dropdown
-            icon='bx bx-bell'
+            icon='bx bx-bell bx-tada-hover'
             badge={Object.keys(notifications).length}
             contentData={notifications}
             renderItems={(item, index) => renderNotificationItem(item, index)}ù
