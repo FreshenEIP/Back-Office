@@ -5,22 +5,39 @@ import { StatusCard, Table } from '../components'
 
 import statusCard from "../assets/JsonData/status_card.json"
 
-const topCustomers = {
-  head: [
+const tableHead = {
+  customers: [
     "user",
-    "total post",
-    "total like"
+    "total posts",
+    "total likes"
   ],
-  body: [
-    {
-      "username": "john doe",
-      "post": "15",
-      "like": "30000"
-    }
+  reports: [
+    "user",
+    "reported by",
+    "date",
+    "reports type",
+    "actions"
   ]
 }
 
-const renderCustomerHead = (item, index) => (
+const topCustomersBody = [
+  {
+    "username": "john doe",
+    "post": "15",
+    "like": "30000"
+  }
+]
+
+const latestReportsBody = [
+  {
+    "username": "john doe",
+    "by": "jane doe",
+    "date": "28/03/2022",
+    "type": "comments",
+  }
+]
+
+const renderHead = (item, index) => (
   <th key={index}>{item}</th>
 )
 
@@ -29,6 +46,18 @@ const renderCustomerBody = (item, index) => (
     <td>{item.username}</td>
     <td>{item.post}</td>
     <td>{item.like}</td>
+  </tr>
+)
+
+const renderReportsBody = (item, index) => (
+  <tr>
+    <td>{item.username}</td>
+    <td>{item.by}</td>
+    <td>{item.date}</td>
+    <td>
+      <span>{item.type}</span>
+    </td>
+    <td>Actions</td>
   </tr>
 )
 
@@ -63,14 +92,32 @@ const Dashboard = () => {
             </div>
             <div className="card__body">
               <Table
-                headData={topCustomers.head}
-                renderHead={(item, index) => renderCustomerHead(item, index)}
-                bodyData={topCustomers.body}
+                headData={tableHead.customers}
+                renderHead={(item, index) => renderHead(item, index)}
+                bodyData={topCustomersBody}
                 renderBody={(item, index) => renderCustomerBody(item, index)}
               />
             </div>
             <div className="card__footer">
-              <Link to="/">View All</Link>
+              <Link to="/customers">View All</Link>
+            </div>
+          </div>
+        </div>
+        <div className={"col-8"}>
+          <div className="card">
+            <div className="card__header">
+              <h3>Latest reports</h3>
+            </div>
+            <div className="card__body">
+              <Table
+                headData={tableHead.reports}
+                renderHead={(item, index) => renderHead(item, index)}
+                bodyData={latestReportsBody}
+                renderBody={(item, index) => renderReportsBody(item, index)}
+              />
+            </div>
+            <div className="card__footer">
+              <Link to="/reports">View All</Link>
             </div>
           </div>
         </div>
