@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import Dropdown from './Dropdown'
@@ -44,6 +44,8 @@ const TopNav = () => {
       <div className={"topnav__search"}>
         <input type={"text"} placeholder={"Search here..."}/>
         <i className='bx bx-search'></i>
+      </div>
+      <div className="topnav__status">
       </div>
       <div className="topnav__right">
         <div className="topnav__right-item">

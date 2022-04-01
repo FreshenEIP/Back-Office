@@ -106,3 +106,23 @@ input:focus {
   text-align: center;
   text-transform: capitalize;
 }
+
+.danger {
+  background-color: var(--main-color-red);
+}
+
+.warning {
+  background-color: var(--main-color-orange);
+}
+
+.success {
+  background-color: var(--main-color-green);
+}
+
+.primary {
+  background-color: var(--main-color-blue);
+}
+
+.secondary {
+  background-color: var(--main-color-cyan);
+}
