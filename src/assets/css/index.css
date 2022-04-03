@@ -9,6 +9,16 @@
   --second-color: #62b4ff;
   --box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
+  --main-bg-light: #ffffff;
+  --second-bg-light: #fafafb;
+  --txt-color-light: #455560;
+  --box-shadow-light: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  --main-bg-dark: #2d2d2d;
+  --second-bg-dark: #202020;
+  --txt-color-dark: #bbbbbb;
+  --box-shadow-dark: rgba(0, 0, 0, 0.2) 0px 5px 10px;
+
   --main-color-blue: #349eff;
   --second-color-blue: #62b4ff;
 
@@ -125,4 +135,39 @@ input:focus {
 
 .secondary {
   background-color: var(--main-color-cyan);
+}
+
+.light-background {
+  background-color: var(--main-bg-light);
+  color: #000000;
+}
+
+.dark-background {
+  background-color: var(--main-bg-dark);
+  color: #ffffff;
+}
+
+.blue-color {
+  background-color: var(--main-color-blue);
+  color: #ffffff;
+}
+
+.red-color {
+  background-color: var(--main-color-red);
+  color: #ffffff;
+}
+
+.cyan-color {
+  background-color: var(--main-color-cyan);
+  color: #ffffff;
+}
+
+.green-color {
+  background-color: var(--main-color-green);
+  color: #ffffff;
+}
+
+.orange-color {
+  background-color: var(--main-color-orange);
+  color: #ffffff;
 }
