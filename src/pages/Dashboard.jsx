@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom'
 
 import { Badge, StatusCard, Table } from '../components'
 
-import statusCard from "../assets/JsonData/status_card.json"
+import axios from "axios";
 
 const tableHead = {
   customers: [
@@ -70,6 +70,35 @@ const renderReportsBody = (item, index) => (
 )
 
 const Dashboard = () => {
+  const [infoCards, setInfoCards] = useState({
+    users: {
+      icon: 'bx bx-user',
+      count: 0,
+      title: 'Total users'
+    },
+    friperie: {
+      icon: 'bx bx-shopping-bag',
+      count: 0,
+      title: 'Total friperies'
+    }
+  });
+
+  useEffect(() => {
+    axios.get("http://localhost:4500/back-office/user")
+      .then((value) => {
+        setInfoCards(prevState => ({
+          ...prevState,
+          users: {
+            ...prevState.users,
+            count: value.data.number_users
+          }
+        }))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
+
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>
@@ -77,12 +106,12 @@ const Dashboard = () => {
         <div className="col-6">
           <div className="row">
             {
-              statusCard.map((item, index) => (
+              Object.keys(infoCards).map((key, index) => (
                 <div className="col-6">
                   <StatusCard
-                    icon={item.icon}
-                    count={item.count}
-                    title={item.title}
+                    icon={infoCards[key].icon}
+                    count={infoCards[key].count}
+                    title={infoCards[key].title}
                   />
                 </div>
               ))

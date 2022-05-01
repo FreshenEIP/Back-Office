@@ -10,11 +10,11 @@ const renderHead = (item, index) => <th key={index}>{item}</th>;
 
 const renderBody = (item, index) => (
   <tr key={index}>
-    <td>{item.id}</td>
-    <td>{item.name}</td>
-    <td>{item.email}</td>
-    <td>{item.phone}</td>
-    <td>{item.location}</td>
+    <td>{item.id ?? '-'}</td>
+    <td>{item.name ?? '-'}</td>
+    <td>{item.email ?? '-'}</td>
+    <td>{item.phone ?? '-'}</td>
+    <td>{item.location ?? '-'}</td>
   </tr>
 );
 
