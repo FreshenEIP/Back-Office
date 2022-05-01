@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { Badge, StatusCard, Table } from '../components'
 
 import axios from "axios";
+import {customerBody, infoCards} from "../interface/customer/customer";
+import {report} from "../interface/report/report";
 
 const tableHead = {
   customers: [
@@ -45,20 +47,20 @@ const reportType = {
   "very low": "primary"
 }
 
-const renderHead = (item, index) => (
+const renderHead = (item: any, index: number) => (
   <th key={index}>{item}</th>
 )
 
-const renderCustomerBody = (item, index) => (
-  <tr>
+const renderCustomerBody = (item: customerBody, index: number) => (
+  <tr key={index}>
     <td>{item.username}</td>
     <td>{item.post}</td>
     <td>{item.like}</td>
   </tr>
 )
 
-const renderReportsBody = (item, index) => (
-  <tr>
+const renderReportsBody = (item: report, index: number) => (
+  <tr key={index}>
     <td>{item.username}</td>
     <td>{item.by}</td>
     <td>{item.date}</td>
@@ -70,7 +72,7 @@ const renderReportsBody = (item, index) => (
 )
 
 const Dashboard = () => {
-  const [infoCards, setInfoCards] = useState({
+  const [infoCards, setInfoCards] = useState<infoCards>({
     users: {
       icon: 'bx bx-user',
       count: 0,
@@ -84,7 +86,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    axios.get("http://localhost:4500/back-office/user")
+    axios.get("http://localhost:4500/back-office/users/number")
       .then((value) => {
         setInfoCards(prevState => ({
           ...prevState,
@@ -107,7 +109,7 @@ const Dashboard = () => {
           <div className="row">
             {
               Object.keys(infoCards).map((key, index) => (
-                <div className="col-6">
+                <div className="col-6" key={index}>
                   <StatusCard
                     icon={infoCards[key].icon}
                     count={infoCards[key].count}
@@ -130,9 +132,9 @@ const Dashboard = () => {
             <div className="card__body">
               <Table
                 headData={tableHead.customers}
-                renderHead={(item, index) => renderHead(item, index)}
+                renderHead={(item: any, index: number) => renderHead(item, index)}
                 bodyData={topCustomersBody}
-                renderBody={(item, index) => renderCustomerBody(item, index)}
+                renderBody={(item: customerBody, index: number) => renderCustomerBody(item, index)}
               />
             </div>
             <div className="card__footer">
@@ -148,9 +150,9 @@ const Dashboard = () => {
             <div className="card__body">
               <Table
                 headData={tableHead.reports}
-                renderHead={(item, index) => renderHead(item, index)}
+                renderHead={(item: any, index: number) => renderHead(item, index)}
                 bodyData={latestReportsBody}
-                renderBody={(item, index) => renderReportsBody(item, index)}
+                renderBody={(item: report, index: number) => renderReportsBody(item, index)}
               />
             </div>
             <div className="card__footer">
