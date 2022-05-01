@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
 const Table = (props) => {
   const initDataShow =
@@ -12,13 +12,18 @@ const Table = (props) => {
   let pages = 1;
   let range = [];
 
-  const selectPage = (page) => {
+  const selectPage = useCallback((page) => {
     const start = props.limit * page;
     const end = start + props.limit;
 
     setDataShow(props.bodyData.slice(start, end));
     setCurrentPage(page);
-  };
+  }, [props.bodyData, props.limit]);
+
+  useEffect(() => {
+    selectPage(currentPage)
+  }, [currentPage, props.bodyData, selectPage]);
+
 
   if (props.limit !== undefined) {
     const page = Math.floor(props.bodyData.length / props.limit);
