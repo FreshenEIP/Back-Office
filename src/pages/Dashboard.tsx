@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import { Link } from 'react-router-dom'
 
 import { Badge, StatusCard, Table } from '../components'
 
 import axios from "axios";
 import {customerBody, infoCards} from "../interface/customer/customer";
 import {report} from "../interface/report/report";
+// @ts-ignore
+import {Link} from "react-router-dom";
 
 const tableHead = {
   customers: [
@@ -65,6 +66,7 @@ const renderReportsBody = (item: report, index: number) => (
     <td>{item.by}</td>
     <td>{item.date}</td>
     <td>
+       {/*@ts-ignore*/}
       <Badge type={reportType[item.type]} content={item.type}/>
     </td>
     <td>Actions</td>
@@ -78,7 +80,7 @@ const Dashboard = () => {
       count: 0,
       title: 'Total users'
     },
-    friperie: {
+    friperies: {
       icon: 'bx bx-shopping-bag',
       count: 0,
       title: 'Total friperies'
@@ -99,6 +101,19 @@ const Dashboard = () => {
       .catch((error) => {
         console.error(error)
       })
+    axios.get("http://localhost:4500/friperies/number")
+      .then((value) => {
+        setInfoCards(prevState => ({
+          ...prevState,
+          friperies: {
+            ...prevState.friperies,
+            count: value.data.number_friperies
+          }
+        }))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
 
   return (
@@ -111,9 +126,9 @@ const Dashboard = () => {
               Object.keys(infoCards).map((key, index) => (
                 <div className="col-6" key={index}>
                   <StatusCard
-                    icon={infoCards[key].icon}
-                    count={infoCards[key].count}
-                    title={infoCards[key].title}
+                    icon={infoCards[key as keyof infoCards].icon}
+                    count={infoCards[key as keyof infoCards].count}
+                    title={infoCards[key as keyof infoCards].title}
                   />
                 </div>
               ))

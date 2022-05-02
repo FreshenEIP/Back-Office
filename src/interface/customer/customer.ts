@@ -12,7 +12,7 @@ interface infoCard {
 
 export interface infoCards {
  users: infoCard,
- friperie: infoCard
+ friperies: infoCard
 }
 
 export interface user {
