@@ -1,9 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
 
 import { Badge, StatusCard, Table } from '../components'
 
-import statusCard from "../assets/JsonData/status_card.json"
+import axios from "axios";
+import {customerBody, infoCards} from "../interface/customer/customer";
+import {report} from "../interface/report/report";
+// @ts-ignore
+import {Link} from "react-router-dom";
 
 const tableHead = {
   customers: [
@@ -45,24 +48,25 @@ const reportType = {
   "very low": "primary"
 }
 
-const renderHead = (item, index) => (
+const renderHead = (item: any, index: number) => (
   <th key={index}>{item}</th>
 )
 
-const renderCustomerBody = (item, index) => (
-  <tr>
+const renderCustomerBody = (item: customerBody, index: number) => (
+  <tr key={index}>
     <td>{item.username}</td>
     <td>{item.post}</td>
     <td>{item.like}</td>
   </tr>
 )
 
-const renderReportsBody = (item, index) => (
-  <tr>
+const renderReportsBody = (item: report, index: number) => (
+  <tr key={index}>
     <td>{item.username}</td>
     <td>{item.by}</td>
     <td>{item.date}</td>
     <td>
+       {/*@ts-ignore*/}
       <Badge type={reportType[item.type]} content={item.type}/>
     </td>
     <td>Actions</td>
@@ -70,6 +74,48 @@ const renderReportsBody = (item, index) => (
 )
 
 const Dashboard = () => {
+  const [infoCards, setInfoCards] = useState<infoCards>({
+    users: {
+      icon: 'bx bx-user',
+      count: 0,
+      title: 'Total users'
+    },
+    friperies: {
+      icon: 'bx bx-shopping-bag',
+      count: 0,
+      title: 'Total friperies'
+    }
+  });
+
+  useEffect(() => {
+    axios.get("http://localhost:4500/back-office/users/number")
+      .then((value) => {
+        setInfoCards(prevState => ({
+          ...prevState,
+          users: {
+            ...prevState.users,
+            count: value.data.number_users
+          }
+        }))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    axios.get("http://localhost:4500/friperies/number")
+      .then((value) => {
+        setInfoCards(prevState => ({
+          ...prevState,
+          friperies: {
+            ...prevState.friperies,
+            count: value.data.number_friperies
+          }
+        }))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }, [])
+
   return (
     <div>
       <h2 className="page-header">Dashboard</h2>
@@ -77,12 +123,12 @@ const Dashboard = () => {
         <div className="col-6">
           <div className="row">
             {
-              statusCard.map((item, index) => (
-                <div className="col-6">
+              Object.keys(infoCards).map((key, index) => (
+                <div className="col-6" key={index}>
                   <StatusCard
-                    icon={item.icon}
-                    count={item.count}
-                    title={item.title}
+                    icon={infoCards[key as keyof infoCards].icon}
+                    count={infoCards[key as keyof infoCards].count}
+                    title={infoCards[key as keyof infoCards].title}
                   />
                 </div>
               ))
@@ -101,9 +147,9 @@ const Dashboard = () => {
             <div className="card__body">
               <Table
                 headData={tableHead.customers}
-                renderHead={(item, index) => renderHead(item, index)}
+                renderHead={(item: any, index: number) => renderHead(item, index)}
                 bodyData={topCustomersBody}
-                renderBody={(item, index) => renderCustomerBody(item, index)}
+                renderBody={(item: customerBody, index: number) => renderCustomerBody(item, index)}
               />
             </div>
             <div className="card__footer">
@@ -119,9 +165,9 @@ const Dashboard = () => {
             <div className="card__body">
               <Table
                 headData={tableHead.reports}
-                renderHead={(item, index) => renderHead(item, index)}
+                renderHead={(item: any, index: number) => renderHead(item, index)}
                 bodyData={latestReportsBody}
-                renderBody={(item, index) => renderReportsBody(item, index)}
+                renderBody={(item: report, index: number) => renderReportsBody(item, index)}
               />
             </div>
             <div className="card__footer">
