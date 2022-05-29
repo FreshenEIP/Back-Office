@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from "react";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Table } from '../components';
 
-import {Table} from "../components";
-
-import {user} from "../interface/customer/customer";
-import axios from "axios";
-
-const customerTableHead = ["uid", "username", "email"];
+const customerTableHead = ['uid', 'username', 'email'];
 
 const renderHead = (item: any, index: number) => <th key={index}>{item}</th>;
 
-const renderBody = (item: user, index: number) => (
+const renderBody = (item: any, index: number) => (
   <tr key={index}>
     <td>{item.uid ?? '-'}</td>
     <td>{item.username ?? '-'}</td>
@@ -18,21 +15,22 @@ const renderBody = (item: user, index: number) => (
 );
 
 const Customers = () => {
-  const [userList, setUserList] = useState<user[]>([]);
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:4500/back-office/users/')
-      .then(value => {
-        setUserList(value.data)
+    axios
+      .get('http://localhost:4500/back-office/users/')
+      .then((value) => {
+        setUserList(value.data);
       })
       .catch((error) => {
-        console.error(error)
-      })
-  }, [])
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div>
-      <h2 className={"page-header"}>Customers</h2>
+      <h2 className={'page-header'}>Customers</h2>
       <div className='row'>
         <div className='col-12'>
           <div className='card'>
@@ -41,8 +39,12 @@ const Customers = () => {
                 limit={20}
                 headData={customerTableHead}
                 bodyData={userList}
-                renderHead={(item: any, index: number) => renderHead(item, index)}
-                renderBody={(item: user, index: number) => renderBody(item, index)}
+                renderHead={(item: any, index: number) =>
+                  renderHead(item, index)
+                }
+                renderBody={(item: any, index: number) =>
+                  renderBody(item, index)
+                }
               />
             </div>
           </div>

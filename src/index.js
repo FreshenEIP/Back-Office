@@ -4,6 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import './assets/boxicons-2.1.2/css/boxicons.min.css'
 import './assets/css/grid.css'
+import './assets/css/theme.css'
 import './assets/css/index.css'
 
 import App from "./App.js"
