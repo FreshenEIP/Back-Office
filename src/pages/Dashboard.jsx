@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-// @ts-ignore
 import { Link } from 'react-router-dom';
 import { Badge, StatusCard, Table } from '../components';
 
