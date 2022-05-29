@@ -4,9 +4,9 @@ import { Table } from '../components';
 
 const customerTableHead = ['uid', 'username', 'email'];
 
-const renderHead = (item: any, index: number) => <th key={index}>{item}</th>;
+const renderHead = (item, index) => <th key={index}>{item}</th>;
 
-const renderBody = (item: any, index: number) => (
+const renderBody = (item, index) => (
   <tr key={index}>
     <td>{item.uid ?? '-'}</td>
     <td>{item.username ?? '-'}</td>
@@ -39,12 +39,8 @@ const Customers = () => {
                 limit={20}
                 headData={customerTableHead}
                 bodyData={userList}
-                renderHead={(item: any, index: number) =>
-                  renderHead(item, index)
-                }
-                renderBody={(item: any, index: number) =>
-                  renderBody(item, index)
-                }
+                renderHead={(item, index) => renderHead(item, index)}
+                renderBody={(item, index) => renderBody(item, index)}
               />
             </div>
           </div>

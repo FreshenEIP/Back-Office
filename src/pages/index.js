@@ -1,3 +1,3 @@
-export { default as Dashboard } from "./Dashboard.tsx"
-export { default as Customers } from "./Customers.tsx"
-export { default as Reports } from "./Reports.jsx"
+export { default as Dashboard } from './Dashboard.jsx';
+export { default as Customers } from './Customers.jsx';
+export { default as Reports } from './Reports.jsx';
