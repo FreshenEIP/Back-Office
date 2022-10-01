@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import themeAction from '../redux/actions/themeActions';
 import '../assets/css/thememenu.css';
+import themeAction from '../redux/actions/themeActions';
 
 const mode_settings = [
   {
@@ -91,12 +91,10 @@ const ThemeMenu = () => {
 
   useEffect(() => {
     const themeClass = mode_settings.find(
-      (el) =>
-        el.class === localStorage.getItem('themeMode', 'theme-mode-light'),
+      (el) => el.class === localStorage.getItem('themeMode'),
     );
     const colorClass = color_settings.find(
-      (el) =>
-        el.class === localStorage.getItem('themeColor', 'theme-mode-blue'),
+      (el) => el.class === localStorage.getItem('themeColor'),
     );
 
     if (themeClass !== undefined) setCurrMode(themeClass.id);

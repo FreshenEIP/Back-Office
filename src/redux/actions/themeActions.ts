@@ -1,11 +1,11 @@
-const setMode = (mode) => {
+const setMode = (mode: string) => {
   return {
     type: 'SET_MODE',
     payload: mode,
   };
 };
 
-const setColor = (color) => {
+const setColor = (color: string) => {
   return {
     type: 'SET_COLOR',
     payload: color,

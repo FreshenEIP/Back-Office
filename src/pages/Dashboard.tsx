@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, StatusCard, Table } from '../components';
+import { Badge, StatusCard, Table } from '../components/index';
 
 const tableHead = {
   customers: ['user', 'total posts', 'total likes'],
@@ -49,7 +49,6 @@ const renderReportsBody = (item, index) => (
     <td>{item.by}</td>
     <td>{item.date}</td>
     <td>
-      {/*@ts-ignore*/}
       <Badge type={reportType[item.type]} content={item.type} />
     </td>
     <td>Actions</td>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import userImage from '../assets/images/user_image.jpg';
 import notifications from '../assets/JsonData/notification.json';
