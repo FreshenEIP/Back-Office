@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import './assets/css/badge.css';
 import './assets/css/dropdown.css';
@@ -10,14 +9,15 @@ import './assets/css/table.css';
 import './assets/css/topnav.css';
 import { Routes, Sidebar, TopNav } from './components';
 import themeAction from './redux/actions/themeActions';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 
 const App = () => {
-  const themeReducer = useSelector((state) => state.themeReducer);
-  const disptach = useDispatch();
+  const themeReducer = useAppSelector((state) => state.themeReducer);
+  const disptach = useAppDispatch();
 
   useEffect(() => {
-    const themeClass = localStorage.getItem('themeMode', 'theme-mode-light');
-    const colorClass = localStorage.getItem('themeColor', 'theme-mode-blue');
+    const themeClass = localStorage.getItem('themeMode');
+    const colorClass = localStorage.getItem('themeColor');
     disptach(themeAction.setMode(themeClass));
     disptach(themeAction.setColor(colorClass));
   }, [disptach]);
@@ -25,6 +25,7 @@ const App = () => {
   return (
     <Route
       render={(props) => (
+        // @ts-ignore
         <div className={`layout ${themeReducer.mode} ${themeReducer.color}`}>
           <Sidebar {...props} />
           <div className={'layout__content'}>

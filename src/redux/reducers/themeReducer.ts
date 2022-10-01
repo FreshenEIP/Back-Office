@@ -1,4 +1,7 @@
-const themeReducer = (state = {}, action) => {
+const themeReducer = (
+  state = {},
+  action: { type: string; payload: string },
+) => {
   switch (action.type) {
     case 'SET_MODE':
       return {
