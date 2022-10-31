@@ -1,22 +1,24 @@
 export interface customerBody {
- username: string,
- post: any,
- like: number
+  username: string;
+  post: any;
+  like: number;
 }
 
 interface infoCard {
- icon: string,
- count: number,
- title: string
+  icon: string;
+  count: number;
+  title: string;
 }
 
 export interface infoCards {
- users: infoCard,
- friperies: infoCard
+  users: infoCard;
+  friperies: infoCard;
 }
 
 export interface user {
- uid: string,
- email: string,
- username: string
+  uid: string;
+  email: string;
+  username: string;
 }
+
+export interface Customers {}

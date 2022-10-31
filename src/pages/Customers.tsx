@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { Table } from '../components';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { fetchCustomers } from '../api/customers';
+import Table from '../components/Table';
 
 const customerTableHead = ['uid', 'username', 'email'];
 
@@ -15,18 +16,14 @@ const renderBody = (item, index) => (
 );
 
 const Customers = () => {
-  const [userList, setUserList] = useState([]);
+  const [page, setPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(0);
+  const { data, isLoading, isError } = useQuery(
+    ['customers', page, pageSize],
+    () => fetchCustomers('', page, pageSize),
+  );
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:4500/back-office/users/')
-      .then((value) => {
-        setUserList(value.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  if (isError) return <div>Error ...</div>;
 
   return (
     <div>
@@ -35,13 +32,19 @@ const Customers = () => {
         <div className='col-12'>
           <div className='card'>
             <div className='card__body'>
-              <Table
-                limit={20}
-                headData={customerTableHead}
-                bodyData={userList}
-                renderHead={(item, index) => renderHead(item, index)}
-                renderBody={(item, index) => renderBody(item, index)}
-              />
+              {isLoading ? (
+                <div></div>
+              ) : (
+                <>
+                  <Table
+                    limit={20}
+                    headData={customerTableHead}
+                    bodyData={data!.data}
+                    renderHead={(item, index) => renderHead(item, index)}
+                    renderBody={(item, index) => renderBody(item, index)}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>
