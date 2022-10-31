@@ -1,4 +1,6 @@
 import { createRoot } from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
@@ -8,14 +10,26 @@ import './assets/css/index.css';
 import './assets/css/theme.css';
 import { store } from './redux/store';
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      staleTime: 1000 * 20,
+    },
+  },
+});
+
 document.title = 'Freshen';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
   <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   </Router>,
 );
