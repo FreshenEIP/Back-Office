@@ -5,7 +5,7 @@ import './assets/css/dropdown.css';
 import './assets/css/layout.css';
 import './assets/css/sidebar.css';
 import './assets/css/statuscard.css';
-import './assets/css/table.css';
+// import './assets/css/table.css';
 import './assets/css/topnav.css';
 import { Routes, Sidebar, TopNav } from './components';
 import themeAction from './redux/actions/themeActions';
