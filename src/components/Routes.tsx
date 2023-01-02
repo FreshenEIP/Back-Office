@@ -1,6 +1,6 @@
 import { Route, Switch } from 'react-router-dom';
 
-import { Comments, Customers, Dashboard, Reports } from '../pages';
+import { Brands, Comments, Customers, Dashboard, Reports } from '../pages';
 
 const Routes = () => {
   return (
@@ -9,6 +9,7 @@ const Routes = () => {
       <Route path={'/customers'} exact component={Customers} />
       <Route path={'/reports'} exact component={Reports} />
       <Route path={'/comments'} exact component={Comments} />
+      <Route path={'/brands'} exact component={Brands} />
     </Switch>
   );
 };

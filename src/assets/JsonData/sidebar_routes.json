@@ -12,11 +12,16 @@
     {
         "display_name": "Comments",
         "route": "/comments",
-        "icon": "bx bxs-comment-detail"
+        "icon": "bx bx-comment-detail"
     },
     {
         "display_name": "Reports",
         "route": "/reports",
         "icon": "bx bxs-report"
+    },
+    {
+        "display_name": "Brands",
+        "route": "/brands",
+        "icon": "bx bxs-t-shirt"
     }
 ]

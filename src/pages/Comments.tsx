@@ -46,7 +46,7 @@ const Comments = () => {
 
   return (
     <>
-      <h2 className={'page-header'}>Reports</h2>
+      <h2 className={'page-header'}>Comments</h2>
       <Toolbar
         direction='row'
         justifyContent='space-between'
