@@ -1,6 +1,8 @@
-export interface report {
-  username: string,
-  by: string,
-  date: any,
-  type: string
+export interface Report {
+  type: string;
+  status: string;
+  reportedId: string;
+  category: string;
+  description: string;
+  createdAt: string;
 }
