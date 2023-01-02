@@ -1,11 +1,6 @@
 import {
   Button,
-  Chip,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
   Stack,
   Table,
   TableBody,
@@ -14,34 +9,24 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { fetchReports } from '../api/reports';
+import { fetchComments } from '../api/comments';
 import { Chip as UserChip } from '../components/User/Chip';
-import { Report } from '../interface/report/report';
+import { Comment } from '../interface/comment/comment';
 
-const Reports = () => {
+const Comments = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const [status, setStatus] = useState('');
   const token =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzg0NGE1ODFkZmFlZDE1NWUzNzhiMmIiLCJlbWFpbCI6ImFsZXhpcy5mYWJhckBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRkTjdHeXJlT2dBd2ZjdkVVMldyQ2R1aTZXc1ZQdUt0OG1ZVk9reFd1d0NhOG4yRHg3Qkk1MiIsInVzZXJuYW1lIjoiQWxleGlzIiwicm9sZXMiOlsiZnJlc2hlbjp1c2VyIiwiZnJlc2hlbjphZG1pbiJdLCJiYW5uZWQiOmZhbHNlLCJwcml2YWN5IjoicHVibGljIiwiYWN0aXZlIjpmYWxzZSwibG9jYWxlIjoiZnJfRlIiLCJjcmVhdGlvbkRhdGUiOiIyMDIyLTExLTI4VDA1OjQyOjQ4LjIxMFoiLCJwcm92aWRlciI6ImVtYWlsIiwiZGVzY3JpcHRpb24iOiIiLCJpYXQiOjE2NzI2MzIxNDAsImV4cCI6MTY3MjcxODU0MH0.hY6E2YCBQBhvTAyJ2hN7VEZuQ8e7Xrt-2AzO_C_dJPg';
-  const getReportList = useQuery(['reports', page, pageSize, status], () =>
-    fetchReports(token, page, pageSize, status),
+  const getCommentList = useQuery(['comments', page, pageSize], () =>
+    fetchComments(token, page, pageSize),
   );
-  const { data, isLoading, isError, isRefetching } = getReportList;
-
-  const handleChangeStatus = useCallback(
-    (e) => {
-      setStatus(e.target.value);
-      getReportList.refetch();
-    },
-    [getReportList],
-  );
+  const { data, isLoading, isError, isRefetching } = getCommentList;
 
   if (isError) return <div>Error ...</div>;
 
@@ -75,7 +60,7 @@ const Reports = () => {
           justifyContent={'space-between'}
           spacing={2}
         >
-          <TextField size='small' label='User ID'></TextField>
+          {/* <TextField size='small' label='User ID'></TextField>
           <FormControl sx={{ 'min-width': '120px' }} size='small'>
             <InputLabel id='select-status-label'>Status</InputLabel>
             <Select
@@ -100,7 +85,7 @@ const Reports = () => {
             <MenuItem value='user'>User</MenuItem>
             <MenuItem value='post'>Post</MenuItem>
             <MenuItem value='comment'>Comment</MenuItem>
-          </TextField>
+          </TextField> */}
         </Stack>
       </Toolbar>
       <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
@@ -109,9 +94,9 @@ const Reports = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Reported type</TableCell>
-                <TableCell>Message</TableCell>
+                <TableCell>PostId</TableCell>
+                <TableCell>Like</TableCell>
+                <TableCell>Reply</TableCell>
                 <TableCell>Creation Date</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -120,7 +105,7 @@ const Reports = () => {
               {isLoading || isRefetching ? (
                 <></>
               ) : (
-                data!.data.map((report: Report, idx: number) => {
+                data!.data.map((comment: Comment, idx: number) => {
                   return (
                     <TableRow>
                       <TableCell align='center'>
@@ -137,18 +122,12 @@ const Reports = () => {
                           clickable={false}
                         />
                       </TableCell>
-                      <TableCell>
-                        {report.status === 'opened' ? (
-                          <Chip label='Opened' color='success' />
-                        ) : (
-                          <Chip label='Closed' color='error' />
-                        )}
-                      </TableCell>
-                      <TableCell>{report.type}</TableCell>
-                      <TableCell>Content</TableCell>
+                      <TableCell>{comment.postId}</TableCell>
+                      <TableCell>{comment.like}</TableCell>
+                      <TableCell>{comment.reply.length}</TableCell>
                       <TableCell>
                         <div>
-                          {dayjs(report.createdAt).format(
+                          {dayjs(comment.createdAt).format(
                             'DD-MM-YYYY hh:mm:ss',
                           )}
                         </div>
@@ -189,4 +168,4 @@ const Toolbar = styled(Stack)`
   padding: 1rem;
 `;
 
-export default Reports;
+export default Comments;

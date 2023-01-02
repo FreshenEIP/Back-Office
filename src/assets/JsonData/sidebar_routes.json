@@ -10,6 +10,11 @@
         "icon": "bx bx-user-pin"
     },
     {
+        "display_name": "Comments",
+        "route": "/comments",
+        "icon": "bx bxs-comment-detail"
+    },
+    {
         "display_name": "Reports",
         "route": "/reports",
         "icon": "bx bxs-report"
