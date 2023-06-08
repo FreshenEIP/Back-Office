@@ -61,7 +61,7 @@ export const Chip: React.FC<Props> = ({
       placement='top-start'
       onClose={handleCopy}
     >
-      <Link to={clickable === false ? '#' : `/user/${user._id}`}>
+      <Link to={clickable === false ? '#' : `/customers/${user._id}`}>
         <Stack direction='row' spacing={1} alignItems='center'>
           <Stack alignItems='center' sx={{ position: 'relative' }}>
             <Avatar

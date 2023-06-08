@@ -1,3 +1,4 @@
+import { Customers } from '../interface/customer/customer';
 import { CustomerList } from '../interface/routes/customers.list';
 import Axios from '../utils/axios';
 
@@ -16,5 +17,13 @@ export const fetchCustomers = async (
     friperie: type,
     username,
   });
+  return response.data;
+};
+
+export const fetchCustomerById = async (
+  token: string,
+  userId: string,
+): Promise<Customers> => {
+  const response = await Axios.get(`/v2/users/${userId}`, token, {});
   return response.data;
 };
