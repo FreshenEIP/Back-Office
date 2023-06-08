@@ -113,8 +113,7 @@ const Comments = () => {
                           user={{
                             _id: '1234',
                             username: 'Alexis',
-                            discriminator: '1234',
-                            avatar:
+                            profile_picture:
                               'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Favatar&psig=AOvVaw29lflXCXNjVlbG0b2NQ9UU&ust=1667280187600000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCLDW_evcifsCFQAAAAAdAAAAABAE',
                             locale: 'FR_fr',
                             banned: false,

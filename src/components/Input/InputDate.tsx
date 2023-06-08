@@ -1,9 +1,9 @@
-import { FormControl, FormHelperText, TextField } from '@mui/material';
+import { FormControl, FormHelperText } from '@mui/material';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { ConnectedForm } from '../ConnectedForm';
 import React from 'react';
 import { Controller } from 'react-hook-form';
+import { ConnectedForm } from '../ConnectedForm';
 
 interface Props {
   property: string;
@@ -30,7 +30,7 @@ export const InputDate: React.FC<Props> = ({
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label={label}
-                  renderInput={(params) => <TextField {...params} />}
+                  // renderInput={(params) => <TextField {...params} />}
                   value={value}
                   onChange={onChange}
                 />

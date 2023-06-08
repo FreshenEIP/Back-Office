@@ -14,8 +14,7 @@ import { Link } from 'react-router-dom';
 interface User {
   _id: string;
   username: string;
-  discriminator: string;
-  avatar: string;
+  profile_picture: string;
   locale: string;
   banned: boolean;
 }
@@ -32,8 +31,8 @@ export const Chip: React.FC<Props> = ({
   avatarSize = '40px',
 }) => {
   const [copied, setCopied] = useState(false);
-  let countryCode = user.locale.slice(-2).toLowerCase();
-  if (countryCode === 'en') countryCode = 'gb';
+  // let countryCode = user.locale.slice(-2).toLowerCase();
+  // if (countryCode === 'en') countryCode = 'gb';
 
   const handleCopy = useCallback(() => {
     setCopied(false);
@@ -67,21 +66,19 @@ export const Chip: React.FC<Props> = ({
           <Stack alignItems='center' sx={{ position: 'relative' }}>
             <Avatar
               alt={user.username}
-              src={user.avatar}
+              src={user.profile_picture}
               sx={{ width: avatarSize }}
             />
-            <Flag
+            {/* <Flag
               countryCode={countryCode}
               svg
               cdnUrl='https://flagicons.lipis.dev/flags/4x3/'
               cdnSuffix='svg'
               style={{ width: '16px', height: '16px' }}
-            />
+            /> */}
           </Stack>
           <Stack direction='row' alignItems='center' spacing={0.5}>
-            <Typography variant='body2'>
-              {user.username}#{user.discriminator}
-            </Typography>
+            <Typography variant='body2'>{user.username}</Typography>
             {user.banned ? (
               <RiSpam3Fill color='#BA0F30' />
             ) : (

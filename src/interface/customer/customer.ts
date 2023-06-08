@@ -21,4 +21,19 @@ export interface user {
   username: string;
 }
 
-export interface Customers {}
+export interface Customers {
+  _id: string;
+  banned: boolean;
+  banner: string;
+  block: Array<string>;
+  creationDate: string;
+  description: string;
+  email: string;
+  follow: Array<string>;
+  followers: Array<string>;
+  friperie: boolean;
+  privacy: 'public' | 'private';
+  profile_picture: string;
+  username: string;
+  locale: string;
+}
