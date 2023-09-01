@@ -16,15 +16,14 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchComments } from '../api/comments';
 import { Chip as UserChip } from '../components/User/Chip';
+import config from '../config';
 import { Comment } from '../interface/comment/comment';
 
 const Comments = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzg0NGE1ODFkZmFlZDE1NWUzNzhiMmIiLCJlbWFpbCI6ImFsZXhpcy5mYWJhckBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRkTjdHeXJlT2dBd2ZjdkVVMldyQ2R1aTZXc1ZQdUt0OG1ZVk9reFd1d0NhOG4yRHg3Qkk1MiIsInVzZXJuYW1lIjoiQWxleGlzIiwicm9sZXMiOlsiZnJlc2hlbjp1c2VyIiwiZnJlc2hlbjphZG1pbiJdLCJiYW5uZWQiOmZhbHNlLCJwcml2YWN5IjoicHVibGljIiwiYWN0aXZlIjpmYWxzZSwibG9jYWxlIjoiZnJfRlIiLCJjcmVhdGlvbkRhdGUiOiIyMDIyLTExLTI4VDA1OjQyOjQ4LjIxMFoiLCJwcm92aWRlciI6ImVtYWlsIiwiZGVzY3JpcHRpb24iOiIiLCJpYXQiOjE2NzI2MzIxNDAsImV4cCI6MTY3MjcxODU0MH0.hY6E2YCBQBhvTAyJ2hN7VEZuQ8e7Xrt-2AzO_C_dJPg';
   const getCommentList = useQuery(['comments', page, pageSize], () =>
-    fetchComments(token, page, pageSize),
+    fetchComments(config.TOKEN, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getCommentList;
 

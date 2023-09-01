@@ -17,6 +17,7 @@ import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCustomers } from '../api/customers';
 import { Chip as UserChip } from '../components/User/Chip';
+import config from '../config';
 import { Customers as User } from '../interface/customer/customer';
 
 const Customers = () => {
@@ -26,14 +27,7 @@ const Customers = () => {
   const [username, setUsername] = useState<string>('');
   const getUserList = useQuery(
     ['customers', page, pageSize, type, username],
-    () =>
-      fetchCustomers(
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDUzOTUzMTI2Y2VmZmJhMWMwMjIzN2UiLCJlbWFpbCI6ImFsZXhpcy5mYWJhckBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRkTUV6UmJ5cVE4MXZ1bXVoUVBKb3N1b2cvTjlkc0R0NS5FcndqeklMdmxIbzV6NUxELzNVLiIsInVzZXJuYW1lIjoidGVycnk5NCIsInJvbGVzIjpbImZyZXNoZW46dXNlciIsImZyZXNoZW46YWRtaW4iXSwiYmFubmVkIjpmYWxzZSwicHJpdmFjeSI6InB1YmxpYyIsImFjdGl2ZSI6ZmFsc2UsImxvY2FsZSI6bnVsbCwiY3JlYXRpb25EYXRlIjoiMjAyMy0wNS0wNFQxMToyMToyMS4wNjdaIiwicHJvdmlkZXIiOiJlbWFpbCIsImRlc2NyaXB0aW9uIjoiIiwiZm9sbG93IjpbXSwiZm9sbG93ZXJzIjpbXSwiYmxvY2siOltdLCJmcmlwZXJpZSI6ZmFsc2UsImlhdCI6MTY4NjE4ODQ3MCwiZXhwIjoxNjg2Mjc0ODcwfQ.zRJRhdGdNFismdjfvSjGW4cv3ZTVbQtzCAIuRDgcRBg',
-        page,
-        pageSize,
-        type,
-        username,
-      ),
+    () => fetchCustomers(config.TOKEN, page, pageSize, type, username),
   );
 
   const { data, isLoading, isRefetching, isError } = getUserList;
@@ -102,7 +96,6 @@ const Customers = () => {
           >
             <MenuItem value=''>All</MenuItem>
             <MenuItem value='true'>Friperie</MenuItem>
-            <MenuItem value='false'>User</MenuItem>
           </TextField>
         </Stack>
       </Toolbar>

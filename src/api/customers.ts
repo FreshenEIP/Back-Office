@@ -10,7 +10,7 @@ export const fetchCustomers = async (
   username: string,
 ): Promise<CustomerList> => {
   if (type === '') type = undefined;
-  if (username === '') type = undefined;
+  if (username === '') username = undefined;
   const response = await Axios.get('v2/users', token, {
     page,
     pageSize,

@@ -101,7 +101,6 @@ const Brands = () => {
               <TableRow>
                 <TableCell>Brands</TableCell>
                 <TableCell>Articles</TableCell>
-                <TableCell>Price</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -114,6 +113,7 @@ const Brands = () => {
               <TableRow>
                 <TableCell align='center'>
                   <BrandChip
+                    clickable={false}
                     brand={{
                       _id: '1234',
                       brand: 'H&M',
@@ -124,8 +124,7 @@ const Brands = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell>0</TableCell>
-                <TableCell>50 €</TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                   <Button>Remove</Button>
                 </TableCell>
