@@ -8,39 +8,44 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { fetchBrands } from '../api/brands';
 import { Chip as BrandChip } from '../components/Brand/Chip';
 import BrandCreation from '../components/Modal/Brand/AddBrand';
 import { CustomDialog } from '../components/Modal/CustomDialog';
-// import { useState } from 'react';
+import config from '../config';
+import { Brand } from '../interface/brand/brand';
 
 const Brands = () => {
-  // const [page, setPage] = useState(0);
-  // const [pageSize, setPageSize] = useState(25);
-  // const token =
-  //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzg0NGE1ODFkZmFlZDE1NWUzNzhiMmIiLCJlbWFpbCI6ImFsZXhpcy5mYWJhckBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRkTjdHeXJlT2dBd2ZjdkVVMldyQ2R1aTZXc1ZQdUt0OG1ZVk9reFd1d0NhOG4yRHg3Qkk1MiIsInVzZXJuYW1lIjoiQWxleGlzIiwicm9sZXMiOlsiZnJlc2hlbjp1c2VyIiwiZnJlc2hlbjphZG1pbiJdLCJiYW5uZWQiOmZhbHNlLCJwcml2YWN5IjoicHVibGljIiwiYWN0aXZlIjpmYWxzZSwibG9jYWxlIjoiZnJfRlIiLCJjcmVhdGlvbkRhdGUiOiIyMDIyLTExLTI4VDA1OjQyOjQ4LjIxMFoiLCJwcm92aWRlciI6ImVtYWlsIiwiZGVzY3JpcHRpb24iOiIiLCJpYXQiOjE2NzI2MzIxNDAsImV4cCI6MTY3MjcxODU0MH0.hY6E2YCBQBhvTAyJ2hN7VEZuQ8e7Xrt-2AzO_C_dJPg';
-  // const getCommentList = useQuery(['brands', page, pageSize], () =>
-  //   fetchBrands(token, page, pageSize),
-  // );
-  // const { data, isLoading, isError, isRefetching } = getCommentList;
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(25);
+  const getBrandsList = useQuery(['brands', page, pageSize], () =>
+    fetchBrands(config.TOKEN, page, pageSize),
+  );
+  const { data, isLoading, isError, isRefetching } = getBrandsList;
 
-  // if (isError) return <div>Error ...</div>;
+  if (isError) return <div>Error ...</div>;
 
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  // ) => {
-  //   setPageSize(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
-  // const handleChangePage = (
-  //   event: React.MouseEvent<HTMLButtonElement> | null,
-  //   newPage: number,
-  // ) => {
-  //   setPage(newPage);
-  // };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+  };
+
+  console.log(data);
 
   return (
     <>
@@ -100,43 +105,50 @@ const Brands = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Brands</TableCell>
-                <TableCell>Articles</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align='center'>Articles</TableCell>
+                <TableCell align='center'>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* {isLoading || isRefetching ? (
+              {isLoading || isRefetching ? (
                 <></>
               ) : (
-                data!.data.map((brand: Brand, idx: number) => {
-                  return ( */}
-              <TableRow>
-                <TableCell align='center'>
-                  <BrandChip
-                    clickable={false}
-                    brand={{
-                      _id: '1234',
-                      brand: 'H&M',
-                      name: 'H&M',
-                      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/H%26M-Logo.svg/1200px-H%26M-Logo.svg.png',
-                      articles: [],
-                      price: 0,
-                    }}
-                  />
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell>
-                  <Button>Remove</Button>
-                </TableCell>
-              </TableRow>
-              {/* );
+                data.map((brand: Brand, idx: number) => {
+                  return (
+                    <TableRow>
+                      <TableCell align='center'>
+                        <BrandChip
+                          clickable={false}
+                          brand={{
+                            _id: brand._id,
+                            brand: brand.brand,
+                            photo: brand.photo,
+                            articles: brand.articles,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Stack
+                          spacing={2}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                        >
+                          {Object.keys(brand.articles).length}
+                          <Button>View details</Button>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align='center'>
+                        <Button>Remove</Button>
+                      </TableCell>
+                    </TableRow>
+                  );
                 })
-              )} */}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      {/* {isLoading ? (
+      {isLoading ? (
         <></>
       ) : (
         <TablePagination
@@ -149,7 +161,7 @@ const Brands = () => {
           rowsPerPage={pageSize}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      )} */}
+      )}
     </>
   );
 };

@@ -1,8 +1,6 @@
 export interface Brand {
   _id: string;
   brand: string;
-  name: string;
-  logo: string;
+  photo: string;
   articles: Array<any>;
-  price: number;
 }
