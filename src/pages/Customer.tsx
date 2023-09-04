@@ -24,11 +24,8 @@ import { Image } from '../components/Image';
 import config from '../config';
 
 const Posts = ({ userId }) => {
-  const token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDUzOTUzMTI2Y2VmZmJhMWMwMjIzN2UiLCJlbWFpbCI6ImFsZXhpcy5mYWJhckBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRkTUV6UmJ5cVE4MXZ1bXVoUVBKb3N1b2cvTjlkc0R0NS5FcndqeklMdmxIbzV6NUxELzNVLiIsInVzZXJuYW1lIjoidGVycnk5NCIsInJvbGVzIjpbImZyZXNoZW46dXNlciIsImZyZXNoZW46YWRtaW4iXSwiYmFubmVkIjpmYWxzZSwicHJpdmFjeSI6InB1YmxpYyIsImFjdGl2ZSI6ZmFsc2UsImxvY2FsZSI6bnVsbCwiY3JlYXRpb25EYXRlIjoiMjAyMy0wNS0wNFQxMToyMToyMS4wNjdaIiwicHJvdmlkZXIiOiJlbWFpbCIsImRlc2NyaXB0aW9uIjoiIiwiZm9sbG93IjpbXSwiZm9sbG93ZXJzIjpbXSwiYmxvY2siOltdLCJmcmlwZXJpZSI6ZmFsc2UsImlhdCI6MTY4NjI3NzM5NCwiZXhwIjoxNjg2MzYzNzk0fQ.URLvEFLOQY9GO5xqEYCL1mp7H3hAAk4R2S0jnvn_40w';
-
   const getPost = useQuery(['posts', userId], () =>
-    fetchUserPost(token, userId),
+    fetchUserPost(config.TOKEN, userId),
   );
 
   const { data, isLoading, isError } = getPost;
