@@ -84,10 +84,6 @@ export const Customer = () => {
 
   if (isError) return <FetchError />;
 
-  // const cloudinary =
-  //   'https://res.cloudinary.com/ambergg/image/upload/assets/games/cards/games';
-  // const cover = `${cloudinary}/${data!.game}/${data!.mission.type}.jpg`;
-
   return (
     <>
       {isLoading ? (
