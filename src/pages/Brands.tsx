@@ -17,6 +17,7 @@ import { useQuery } from 'react-query';
 import { fetchBrands } from '../api/brands';
 import { Chip as BrandChip } from '../components/Brand/Chip';
 import BrandCreation from '../components/Modal/Brand/AddBrand';
+import BrandView from '../components/Modal/Brand/BrandView';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import config from '../config';
 import { Brand } from '../interface/brand/brand';
@@ -44,8 +45,6 @@ const Brands = () => {
   ) => {
     setPage(newPage);
   };
-
-  console.log(data);
 
   return (
     <>
@@ -134,7 +133,12 @@ const Brands = () => {
                           justifyContent={'center'}
                         >
                           {Object.keys(brand.articles).length}
-                          <Button>View details</Button>
+                          <CustomDialog
+                            header={'Articles'}
+                            trigger={<Button>View details</Button>}
+                          >
+                            <BrandView articles={brand.articles} />
+                          </CustomDialog>
                         </Stack>
                       </TableCell>
                       <TableCell align='center'>
