@@ -18,4 +18,27 @@ export default class Axios {
       timeout: 20000,
     });
   }
+
+  static async post(
+    route: string,
+    token = '',
+    payload: any,
+    params: object = {},
+  ) {
+    return axios.post(Axios.request(route), payload, {
+      headers: { Authorization: token },
+      params,
+      baseURL: this.baseURL,
+      timeout: 20000,
+    });
+  }
+
+  static async delete(route: string, token = '', params: object = {}) {
+    return axios.delete(Axios.request(route), {
+      headers: { Authorization: token },
+      params,
+      baseURL: this.baseURL,
+      timeout: 20000,
+    });
+  }
 }

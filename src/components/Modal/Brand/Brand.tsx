@@ -16,8 +16,8 @@ import {
 } from 'react-icons/ri';
 import { ConnectedForm } from '../../ConnectedForm';
 import { Image } from '../../Image';
-import { InputNumber } from '../../Input/inputNumber';
 import { InputString } from '../../Input/InputString';
+import { InputNumber } from '../../Input/inputNumber';
 
 interface Props {
   onSubmit: (payload: any) => void;
@@ -147,7 +147,7 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
               />
             </Box>
           </Stack>
-          <Articles property={'articles'} fullWidth />
+          {/* <Articles property={'articles'} fullWidth /> */}
           <Button
             fullWidth
             variant='contained'

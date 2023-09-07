@@ -29,11 +29,11 @@ export const CustomDialog: React.FC<Props> = ({
   return (
     <>
       <div onClick={handleOpen}>{trigger}</div>
-      <Dialog fullWidth maxWidth="md" open={open} onClose={handleClose}>
+      <Dialog fullWidth maxWidth='md' open={open} onClose={handleClose}>
         <DialogTitle>
           {header}
           <IconButton
-            aria-label="close"
+            aria-label='close'
             onClick={handleClose}
             sx={{
               position: 'absolute',

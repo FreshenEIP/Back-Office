@@ -13,8 +13,9 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { fetchBrands } from '../api/brands';
+import { toast } from 'react-hot-toast';
+import { useMutation, useQuery } from 'react-query';
+import { deleteBrand, fetchBrands } from '../api/brands';
 import { Chip as BrandChip } from '../components/Brand/Chip';
 import BrandCreation from '../components/Modal/Brand/AddBrand';
 import BrandView from '../components/Modal/Brand/BrandView';
@@ -29,6 +30,14 @@ const Brands = () => {
     fetchBrands(config.TOKEN, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getBrandsList;
+
+  const { mutate } = useMutation(deleteBrand, {
+    onSuccess: () => {
+      toast.success('Marque supprimé');
+      getBrandsList.refetch();
+    },
+    onError: () => {},
+  });
 
   if (isError) return <div>Error ...</div>;
 
@@ -137,12 +146,18 @@ const Brands = () => {
                             header={'Articles'}
                             trigger={<Button>View details</Button>}
                           >
-                            <BrandView articles={brand.articles} />
+                            <BrandView brand={brand.brand} />
                           </CustomDialog>
                         </Stack>
                       </TableCell>
                       <TableCell align='center'>
-                        <Button>Remove</Button>
+                        <Button
+                          onClick={() =>
+                            mutate({ token: config.TOKEN, brand: brand.brand })
+                          }
+                        >
+                          Remove
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );
