@@ -50,13 +50,13 @@ export const Chip: React.FC<Props> = ({
         <Stack direction='row' spacing={1} alignItems='center'>
           <Stack alignItems='center' sx={{ position: 'relative' }}>
             <Avatar
-              alt={brand.name}
-              src={brand.logo}
+              alt={brand.brand}
+              src={brand.photo}
               sx={{ width: avatarSize }}
             />
           </Stack>
           <Stack direction='row' alignItems='center' spacing={0.5}>
-            <Typography variant='body2'>{brand.name}</Typography>
+            <Typography variant='body2'>{brand.brand}</Typography>
           </Stack>
         </Stack>
       </Link>

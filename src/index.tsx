@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
@@ -28,6 +29,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <App />
+        <Toaster />
       </Provider>
       <ReactQueryDevtools />
     </QueryClientProvider>

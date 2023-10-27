@@ -22,6 +22,11 @@
     {
         "display_name": "Brands",
         "route": "/brands",
+        "icon": "bx bxs-store"
+    },
+    {
+        "display_name": "News",
+        "route": "/news",
         "icon": "bx bxs-t-shirt"
     }
 ]

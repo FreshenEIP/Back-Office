@@ -1,45 +1,46 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
-import { createBrand } from '../../../api/brands';
+import { createArticle } from '../../../api/brands';
 import config from '../../../config';
-import { Brand } from './Brand';
+import { Article } from './Article';
 
 interface FormValues {
-  brand: string;
-  url: string;
+  name: string;
+  cost: number;
+  water: number;
+  coton: number;
 }
 
-const BrandCreation = () => {
+const ArticleCreation = ({ brand }) => {
   const defaultValues = {
-    brand: '',
-    url: '',
+    name: '',
+    cost: 0,
+    water: 0,
+    coton: 0,
   };
 
   const methods = useForm<FormValues>({ defaultValues });
 
-  const { mutate } = useMutation(createBrand, {
+  const { mutate } = useMutation(createArticle, {
     onSuccess: (res) => {
-      toast.success('Brand created');
+      toast.success('Article created');
     },
     onError: () => {
-      toast.error('Error while creating brand');
+      toast.error('Error while creating article');
     },
   });
 
   const onSubmit: SubmitHandler<FormValues> = (payload) => {
-    dayjs.extend(utc);
     const token = config.TOKEN;
-    mutate({ payload, token });
+    mutate({ brand, payload, token });
   };
 
   return (
     <FormProvider {...methods}>
-      <Brand onSubmit={onSubmit} />
+      <Article onSubmit={onSubmit} />
     </FormProvider>
   );
 };
 
-export default BrandCreation;
+export default ArticleCreation;

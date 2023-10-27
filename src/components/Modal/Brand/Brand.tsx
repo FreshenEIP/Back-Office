@@ -16,8 +16,8 @@ import {
 } from 'react-icons/ri';
 import { ConnectedForm } from '../../ConnectedForm';
 import { Image } from '../../Image';
-import { InputNumber } from '../../Input/inputNumber';
 import { InputString } from '../../Input/InputString';
+import { InputNumber } from '../../Input/inputNumber';
 
 interface Props {
   onSubmit: (payload: any) => void;
@@ -103,7 +103,7 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
           <Stack direction={'row'} width={'100%'} spacing={2}>
             <Box width={'40%'}>
               <InputString
-                property={'name'}
+                property={'brand'}
                 label={'Name'}
                 required
                 fullWidth
@@ -111,7 +111,7 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
             </Box>
             <Box width={'60%'}>
               <InputString
-                property={'logo'}
+                property={'url'}
                 label={'Logo'}
                 pattern={
                   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/
@@ -138,7 +138,7 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
                         horizontal: 'left',
                       }}
                     >
-                      <Image src={watch('logo')} alt={'item image'} />
+                      <Image src={watch('url')} alt={'item image'} />
                     </Popover>
                   </>
                 }
@@ -147,7 +147,7 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
               />
             </Box>
           </Stack>
-          <Articles property={'articles'} fullWidth />
+          {/* <Articles property={'articles'} fullWidth /> */}
           <Button
             fullWidth
             variant='contained'
