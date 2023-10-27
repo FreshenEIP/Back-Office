@@ -13,5 +13,6 @@ export const fetchReports = async (
     pageSize,
     status,
   });
+  console.log(response.data);
   return response.data;
 };

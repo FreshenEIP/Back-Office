@@ -1,9 +1,9 @@
-import { user as User } from '../customer/customer';
+import { Customers } from '../customer/customer';
 
 export interface Comment {
-  user: User;
+  user: Customers;
   postId: string;
-  like: number;
+  like: Array<string>;
   reply: Array<Comment>;
   createdAt: string;
 }

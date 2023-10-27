@@ -10,17 +10,10 @@ import {
   RiSpam3Fill,
 } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-
-interface User {
-  _id: string;
-  username: string;
-  profile_picture: string;
-  locale: string;
-  banned: boolean;
-}
+import { Customers } from '../../interface/customer/customer';
 
 interface Props {
-  user: User;
+  user: Customers;
   clickable?: boolean;
   avatarSize?: string;
 }
