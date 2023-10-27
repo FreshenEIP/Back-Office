@@ -17,6 +17,7 @@ import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCustomers } from '../api/customers';
 import { Chip as UserChip } from '../components/User/Chip';
+import { RoleChip } from '../components/User/RoleChip';
 import config from '../config';
 import { Customers as User } from '../interface/customer/customer';
 
@@ -105,6 +106,7 @@ const Customers = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User</TableCell>
+                <TableCell>Roles</TableCell>
                 <TableCell>Friperie</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Follower</TableCell>
@@ -117,10 +119,18 @@ const Customers = () => {
                 <></>
               ) : (
                 data!.data.map((user: User, idx: number) => {
+                  console.log(user);
                   return (
                     <TableRow key={user._id}>
                       <TableCell align='center'>
                         <UserChip user={user} clickable={true} />
+                      </TableCell>
+                      <TableCell>
+                        <RoleChip
+                          userList={getUserList}
+                          userId={user._id}
+                          roles={user.roles}
+                        />
                       </TableCell>
                       <TableCell>{user.friperie.toString()}</TableCell>
                       <TableCell>{user.email}</TableCell>

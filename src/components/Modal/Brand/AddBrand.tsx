@@ -8,14 +8,14 @@ import config from '../../../config';
 import { Brand } from './Brand';
 
 interface FormValues {
-  name: string;
-  logo: string;
+  brand: string;
+  url: string;
 }
 
 const BrandCreation = () => {
   const defaultValues = {
-    name: '',
-    logo: '',
+    brand: '',
+    url: '',
   };
 
   const methods = useForm<FormValues>({ defaultValues });

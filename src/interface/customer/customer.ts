@@ -36,4 +36,5 @@ export interface Customers {
   profile_picture: string;
   username: string;
   locale: string;
+  roles: Array<string>;
 }

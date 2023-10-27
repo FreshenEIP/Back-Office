@@ -41,4 +41,18 @@ export default class Axios {
       timeout: 20000,
     });
   }
+
+  static async patch(
+    route: string,
+    token = '',
+    payload: any,
+    params: object = {},
+  ) {
+    return axios.patch(Axios.request(route), payload, {
+      headers: { Authorization: token },
+      params,
+      baseURL: this.baseURL,
+      timeout: 20000,
+    });
+  }
 }

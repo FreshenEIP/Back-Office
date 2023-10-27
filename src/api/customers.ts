@@ -27,3 +27,11 @@ export const fetchCustomerById = async (
   const response = await Axios.get(`/v2/users/${userId}`, token, {});
   return response.data;
 };
+
+export const updateCustomerRoles = async (data) => {
+  const { token, userId, roles } = data;
+  const response = await Axios.patch(`/v2/users/${userId}/roles`, token, {
+    roles,
+  });
+  return response.data;
+};
