@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Chip,
   CircularProgress,
   Grid,
@@ -14,13 +15,15 @@ import {
   styled,
 } from '@mui/material';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 import { RiShieldCheckFill, RiSpam3Fill } from 'react-icons/ri';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { fetchCustomerById } from '../api/customers';
+import { banUser, fetchCustomerById } from '../api/customers';
 import { fetchUserPost } from '../api/post';
 import { FetchError } from '../components/FetchError';
 import { Image } from '../components/Image';
+import { CustomDialog } from '../components/Modal/CustomDialog';
 import config from '../config';
 
 const Posts = ({ userId }) => {
@@ -70,12 +73,26 @@ const Posts = ({ userId }) => {
   );
 };
 
-export const Customer = () => {
-  const { userId }: { userId: string } = useParams();
+const Customer = () => {
+  const { userId } = useParams();
 
   const getUser = useQuery(['customer', userId], () =>
     fetchCustomerById(config.TOKEN, userId),
   );
+
+  const { mutate } = useMutation(banUser, {
+    onSuccess: (res) => {
+      toast.success('Action successfuly done');
+    },
+    onError: () => {
+      toast.error('Error while banning user');
+    },
+  });
+
+  const handleConfirmation = (userId, block) => {
+    const token = config.TOKEN;
+    mutate({ userId, block, token });
+  };
 
   const { data, isLoading, isError } = getUser;
 
@@ -151,6 +168,39 @@ export const Customer = () => {
                           size='small'
                           label={data.email}
                         />
+                        <>
+                          <CustomDialog
+                            header={`Ban ${data.username}`}
+                            trigger={
+                              <Button variant={'outlined'} color='error'>
+                                {data.banned ? <>Unban</> : <>Ban</>}
+                              </Button>
+                            }
+                          >
+                            <div>
+                              <Stack
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                spacing={2}
+                              >
+                                <Typography>
+                                  Êtes-vous sure de vouloir{' '}
+                                  {data.banned ? <>Unban</> : <>Ban</>} cet
+                                  utilisateur ({data.username}) ?
+                                </Typography>
+                                <Button
+                                  variant={'outlined'}
+                                  color='error'
+                                  onClick={() =>
+                                    handleConfirmation(data._id, data.banned)
+                                  }
+                                >
+                                  Confirmer
+                                </Button>
+                              </Stack>
+                            </div>
+                          </CustomDialog>
+                        </>
                       </Stack>
                     </Stack>
                   </Stack>
@@ -171,6 +221,8 @@ export const Customer = () => {
     </>
   );
 };
+
+export default Customer;
 
 const Header = styled(Grid)`
   padding: 0rem 0.5rem;

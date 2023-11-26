@@ -5,10 +5,11 @@ export const fetchNews = async (
   page: number,
   pageSize: number,
 ): Promise<any> => {
-  const response = await Axios.get('v2/', token, {
+  const response = await Axios.get('v2/news', token, {
     page,
     pageSize,
   });
+  console.log(response.data);
   return response.data;
 };
 

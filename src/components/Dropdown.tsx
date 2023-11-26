@@ -30,11 +30,7 @@ const Dropdown = (props) => {
         {props.customToggle ? props.customToggle() : ''}
       </button>
       <div ref={dropdown_content_el} className='dropdown__content'>
-        {props.contentData && props.renderItems
-          ? props.contentData.map((item, index) =>
-              props.renderItems(item, index),
-            )
-          : ''}
+        {props.renderItems ? props.renderItems() : ''}
         {props.renderFooter ? (
           <div className='dropdown__footer'>{props.renderFooter()}</div>
         ) : (

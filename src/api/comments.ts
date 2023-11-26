@@ -12,3 +12,10 @@ export const fetchComments = async (
   });
   return response.data;
 };
+
+export const removeComment = async (data): Promise<any> => {
+  const { token, reportId, commentId } = data;
+  const response = await Axios.delete(`v2/comment/${commentId}`, token);
+  await Axios.patch(`v2/report/${reportId}`, token, {});
+  return response.data;
+};

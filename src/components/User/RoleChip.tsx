@@ -13,8 +13,8 @@ export const RoleChip = ({ userList, userId, roles }) => {
       toast.success('User roles successfully updated');
       userList.refetch();
     },
-    onError: () => {
-      toast.error('Error while updateting user roles');
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
 

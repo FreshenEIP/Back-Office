@@ -7,17 +7,17 @@ import { Article } from './Article';
 
 interface FormValues {
   name: string;
-  cost: number;
-  water: number;
-  coton: number;
+  cost: string;
+  water: string;
+  coton: string;
 }
 
 const ArticleCreation = ({ brand }) => {
   const defaultValues = {
     name: '',
-    cost: 0,
-    water: 0,
-    coton: 0,
+    cost: '0',
+    water: '0',
+    coton: '0',
   };
 
   const methods = useForm<FormValues>({ defaultValues });
@@ -33,7 +33,13 @@ const ArticleCreation = ({ brand }) => {
 
   const onSubmit: SubmitHandler<FormValues> = (payload) => {
     const token = config.TOKEN;
-    mutate({ brand, payload, token });
+    const object = {
+      name: payload.name,
+      cost: parseFloat(payload.cost),
+      water: parseFloat(payload.water),
+      coton: parseFloat(payload.coton),
+    };
+    mutate({ brand, payload: object, token });
   };
 
   return (

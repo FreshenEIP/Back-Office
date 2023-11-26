@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
@@ -20,6 +21,7 @@ import { deleteNews, fetchNews } from '../api/news';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { TextView } from '../components/Modal/News/TextView';
+import { Chip } from '../components/User/Chip';
 import config from '../config';
 
 const News = () => {
@@ -94,57 +96,39 @@ const News = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>12345678901234567890</TableCell>
-                <TableCell align='center'>
-                  <Image
-                    src={
-                      'https://dreamact.eu/uploads/images/blogarticles/fripe-photo.jpg'
-                    }
-                    alt={'item image'}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography>Title</Typography>
-                </TableCell>
-                <TableCell align='center'>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-                    lacinia quam congue ex laoreet aliquam.
-                  </Typography>
-                  <CustomDialog
-                    header={'Text'}
-                    trigger={<Button>View more</Button>}
-                  >
-                    <TextView />
-                  </CustomDialog>
-                </TableCell>
-                <TableCell align='center'>20/09/2022</TableCell>
-                <TableCell align='center'>
-                  <Button>Remove</Button>
-                </TableCell>
-              </TableRow>
-              {/* {isLoading || isRefetching ? (
+              {isLoading || isRefetching ? (
                 <></>
               ) : (
-                data.map((news: any, idx: number) => {
+                data!.data.map((news: any, idx: number) => {
                   return (
                     <TableRow>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
+                      <TableCell>
+                        <Chip user={news.author} />
+                      </TableCell>
                       <TableCell align='center'>
-                        <Button
-                          onClick={() =>
-                            mutate({ token: config.TOKEN, _id: news._id })
-                          }
+                        <Image src={news.image} alt={'item image'} />
+                      </TableCell>
+                      <TableCell align='center'>
+                        <Typography>{news.title}</Typography>
+                      </TableCell>
+                      <TableCell align='center'>
+                        <CustomDialog
+                          header={'Text'}
+                          trigger={<Button>View more</Button>}
                         >
-                          Remove
-                        </Button>
+                          <TextView text={news.text} />
+                        </CustomDialog>
+                      </TableCell>
+                      <TableCell align='center'>
+                        {dayjs(news.creationDate).format('DD-MM-YYYY hh:mm:ss')}
+                      </TableCell>
+                      <TableCell align='center'>
+                        <Button>Remove</Button>
                       </TableCell>
                     </TableRow>
                   );
                 })
-              )} */}
+              )}
             </TableBody>
           </Table>
         </TableContainer>

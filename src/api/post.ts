@@ -8,3 +8,10 @@ export const fetchUserPost = async (
   const response = await Axios.get(`v2/post/user/${userId}`, token, {});
   return response.data;
 };
+
+export const removePost = async (data): Promise<any> => {
+  const { token, reportId, postId } = data;
+  const response = await Axios.delete(`v2/post/${postId}`, token);
+  await Axios.patch(`v2/report/${reportId}`, token, {});
+  return response.data;
+};

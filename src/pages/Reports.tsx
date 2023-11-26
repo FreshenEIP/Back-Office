@@ -15,12 +15,18 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
-import { useQuery } from 'react-query';
+import toast from 'react-hot-toast';
+import { useMutation, useQuery } from 'react-query';
+import { removeComment } from '../api/comments';
+import { removePost } from '../api/post';
 import { fetchReports } from '../api/reports';
+import { Image } from '../components/Image';
+import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import config from '../config';
 import { Report } from '../interface/report/report';
@@ -42,7 +48,27 @@ const Reports = () => {
     [getReportList],
   );
 
+  const { mutate: mutatePost } = useMutation(removePost, {
+    onSuccess: (res) => {
+      toast.success('Post succesfuly deleted');
+    },
+    onError: () => {
+      toast.error('Error while deleting post');
+    },
+  });
+
+  const { mutate: mutateComment } = useMutation(removeComment, {
+    onSuccess: (res) => {
+      toast.success('Comment succesfuly deleted');
+    },
+    onError: () => {
+      toast.error('Error while deleting comment');
+    },
+  });
+
   if (isError) return <div>Error ...</div>;
+
+  console.log(data);
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -56,6 +82,12 @@ const Reports = () => {
     newPage: number,
   ) => {
     setPage(newPage);
+  };
+
+  const handleConfirmation = (type, reportId, commentId, postId) => {
+    const token = config.TOKEN;
+    if (type === 'comment') mutateComment({ token, reportId, commentId });
+    else if (type === 'post') mutatePost({ token, reportId, postId });
   };
 
   return (
@@ -108,11 +140,12 @@ const Reports = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User</TableCell>
+                <TableCell>Reported User</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Reported type</TableCell>
                 <TableCell>Message</TableCell>
                 <TableCell>Creation Date</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -124,9 +157,12 @@ const Reports = () => {
                     <TableRow>
                       <TableCell align='center'>
                         <UserChip
-                          user={report.reportedUser}
+                          user={report.reporterUser}
                           clickable={false}
                         />
+                      </TableCell>
+                      <TableCell align='center'>
+                        <UserChip user={report.reportedUser} />
                       </TableCell>
                       <TableCell>
                         {report.status === 'opened' ? (
@@ -145,7 +181,74 @@ const Reports = () => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Button>Remove</Button>
+                        {report.status === 'opened' ? (
+                          <>
+                            <CustomDialog
+                              header={`Supprimer ${report.type}`}
+                              trigger={
+                                <Button variant={'outlined'} color='error'>
+                                  Delete
+                                </Button>
+                              }
+                            >
+                              <div>
+                                <Stack
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  spacing={2}
+                                >
+                                  <Typography>
+                                    Êtes-vous sure de vouloir supprimer ce{' '}
+                                    {report.type} ?
+                                  </Typography>
+                                  {report.type === 'comment' ? (
+                                    <>
+                                      <Typography>
+                                        {report.comment.message}
+                                      </Typography>
+                                      <Button
+                                        variant={'outlined'}
+                                        color='error'
+                                        onClick={() =>
+                                          handleConfirmation(
+                                            report.type,
+                                            report._id,
+                                            report.comment._id,
+                                            undefined,
+                                          )
+                                        }
+                                      >
+                                        Confirmer
+                                      </Button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {report.post.photos.map((url) => {
+                                        return <Image src={url} alt={url} />;
+                                      })}
+                                      <Button
+                                        variant={'outlined'}
+                                        color='error'
+                                        onClick={() =>
+                                          handleConfirmation(
+                                            report.type,
+                                            report._id,
+                                            undefined,
+                                            report.post._id,
+                                          )
+                                        }
+                                      >
+                                        Confirmer
+                                      </Button>
+                                    </>
+                                  )}
+                                </Stack>
+                              </div>
+                            </CustomDialog>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </TableCell>
                     </TableRow>
                   );

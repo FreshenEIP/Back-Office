@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import {
+  Button,
   MenuItem,
   Paper,
   Stack,
@@ -11,11 +12,14 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
-import { useQuery } from 'react-query';
-import { fetchCustomers } from '../api/customers';
+import toast from 'react-hot-toast';
+import { useMutation, useQuery } from 'react-query';
+import { banUser, fetchCustomers } from '../api/customers';
+import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { RoleChip } from '../components/User/RoleChip';
 import config from '../config';
@@ -25,11 +29,21 @@ const Customers = () => {
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(25);
   const [type, setType] = useState<string>('');
+  const [roles, setRoles] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const getUserList = useQuery(
-    ['customers', page, pageSize, type, username],
-    () => fetchCustomers(config.TOKEN, page, pageSize, type, username),
+    ['customers', page, pageSize, type, username, roles],
+    () => fetchCustomers(config.TOKEN, page, pageSize, type, username, roles),
   );
+
+  const { mutate } = useMutation(banUser, {
+    onSuccess: (res) => {
+      toast.success('Action successfuly done');
+    },
+    onError: () => {
+      toast.error('Error while banning user');
+    },
+  });
 
   const { data, isLoading, isRefetching, isError } = getUserList;
 
@@ -49,6 +63,14 @@ const Customers = () => {
     [getUserList],
   );
 
+  const handleChangeRoles = useCallback(
+    (e) => {
+      setRoles(e.target.value);
+      getUserList.refetch();
+    },
+    [getUserList],
+  );
+
   if (isError) return <div>Error ...</div>;
 
   const handleChangeRowsPerPage = (
@@ -63,6 +85,11 @@ const Customers = () => {
     newPage: number,
   ) => {
     setPage(newPage);
+  };
+
+  const handleConfirmation = (userId, block) => {
+    const token = config.TOKEN;
+    mutate({ userId, block, token });
   };
 
   return (
@@ -98,6 +125,19 @@ const Customers = () => {
             <MenuItem value=''>All</MenuItem>
             <MenuItem value='true'>Friperie</MenuItem>
           </TextField>
+          <TextField
+            size='small'
+            select
+            label='Roles'
+            sx={{ minWidth: '120px' }}
+            value={roles}
+            onChange={handleChangeRoles}
+          >
+            <MenuItem value=''>All</MenuItem>
+            <MenuItem value='user'>User</MenuItem>
+            <MenuItem value='admin'>Admin</MenuItem>
+            <MenuItem value='author'>Author</MenuItem>
+          </TextField>
         </Stack>
       </Toolbar>
       <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
@@ -112,6 +152,7 @@ const Customers = () => {
                 <TableCell>Follower</TableCell>
                 <TableCell>Followers</TableCell>
                 <TableCell>Creation Date</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -119,7 +160,6 @@ const Customers = () => {
                 <></>
               ) : (
                 data!.data.map((user: User, idx: number) => {
-                  console.log(user);
                   return (
                     <TableRow key={user._id}>
                       <TableCell align='center'>
@@ -138,6 +178,41 @@ const Customers = () => {
                       <TableCell>{user.followers.length}</TableCell>
                       <TableCell>
                         {dayjs(user.creationDate).format('DD-MM-YYYY hh:mm:ss')}
+                      </TableCell>
+                      <TableCell>
+                        <>
+                          <CustomDialog
+                            header={`Ban ${user.username}`}
+                            trigger={
+                              <Button variant={'outlined'} color='error'>
+                                {user.banned ? <>Unban</> : <>Ban</>}
+                              </Button>
+                            }
+                          >
+                            <div>
+                              <Stack
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                spacing={2}
+                              >
+                                <Typography>
+                                  Êtes-vous sure de vouloir{' '}
+                                  {user.banned ? <>Unban</> : <>Ban</>} cet
+                                  utilisateur ({user.username}) ?
+                                </Typography>
+                                <Button
+                                  variant={'outlined'}
+                                  color='error'
+                                  onClick={() =>
+                                    handleConfirmation(user._id, user.banned)
+                                  }
+                                >
+                                  Confirmer
+                                </Button>
+                              </Stack>
+                            </div>
+                          </CustomDialog>
+                        </>
                       </TableCell>
                     </TableRow>
                   );
