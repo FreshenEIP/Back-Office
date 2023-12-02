@@ -24,8 +24,11 @@ import { Chip as UserChip } from '../components/User/Chip';
 import { RoleChip } from '../components/User/RoleChip';
 import config from '../config';
 import { Customers as User } from '../interface/customer/customer';
+import { useAppSelector } from '../redux/hooks';
 
 const Customers = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(25);
   const [type, setType] = useState<string>('');
@@ -33,7 +36,15 @@ const Customers = () => {
   const [username, setUsername] = useState<string>('');
   const getUserList = useQuery(
     ['customers', page, pageSize, type, username, roles],
-    () => fetchCustomers(config.TOKEN, page, pageSize, type, username, roles),
+    () =>
+      fetchCustomers(
+        logReducer.accessToken,
+        page,
+        pageSize,
+        type,
+        username,
+        roles,
+      ),
   );
 
   const { mutate } = useMutation(banUser, {
@@ -241,7 +252,6 @@ const Customers = () => {
 };
 
 const Toolbar = styled(Stack)`
-  background: white;
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 1rem;

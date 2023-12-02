@@ -3,7 +3,7 @@ import utc from 'dayjs/plugin/utc';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
-import { createBrand } from '../../../api/brands';
+import { updateBrand } from '../../../api/brands';
 import { useAppSelector } from '../../../redux/hooks';
 import { Brand } from './Brand';
 
@@ -12,22 +12,22 @@ interface FormValues {
   url: string;
 }
 
-const BrandCreation = () => {
+const BrandUpdate = ({ brand, url }) => {
   //@ts-ignore
   const logReducer = useAppSelector((state) => state.logReducer);
   const defaultValues = {
-    brand: '',
-    url: '',
+    brand: brand,
+    url: url,
   };
 
   const methods = useForm<FormValues>({ defaultValues });
 
-  const { mutate } = useMutation(createBrand, {
+  const { mutate } = useMutation(updateBrand, {
     onSuccess: (res) => {
-      toast.success('Brand created');
+      toast.success('Brand updated');
     },
     onError: () => {
-      toast.error('Error while creating brand');
+      toast.error('Error while updating brand');
     },
   });
 
@@ -39,9 +39,9 @@ const BrandCreation = () => {
 
   return (
     <FormProvider {...methods}>
-      <Brand onSubmit={onSubmit} />
+      <Brand onSubmit={onSubmit} isUpdate={true} />
     </FormProvider>
   );
 };
 
-export default BrandCreation;
+export default BrandUpdate;

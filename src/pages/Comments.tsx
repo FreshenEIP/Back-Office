@@ -16,14 +16,16 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { fetchComments } from '../api/comments';
 import { Chip as UserChip } from '../components/User/Chip';
-import config from '../config';
 import { Comment } from '../interface/comment/comment';
+import { useAppSelector } from '../redux/hooks';
 
 const Comments = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const getCommentList = useQuery(['comments', page, pageSize], () =>
-    fetchComments(config.TOKEN, page, pageSize),
+    fetchComments(logReducer.accessToken, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getCommentList;
 
@@ -105,7 +107,6 @@ const Comments = () => {
                 <></>
               ) : (
                 data!.data.map((comment: Comment, idx: number) => {
-                  console.log(comment);
                   return (
                     <TableRow>
                       <TableCell align='center'>
@@ -151,7 +152,6 @@ const Comments = () => {
 };
 
 const Toolbar = styled(Stack)`
-  background: white;
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 1rem;

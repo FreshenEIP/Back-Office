@@ -1,23 +1,28 @@
-import config from '../../config';
-
 const logReducer = (
   state = {
-    roles: 'freshen:admin',
-    accessToken: config.TOKEN,
+    roles: 'freshen:user',
+    accessToken: '',
     refreshToken: '',
   },
-  action: { type: string; accessToken?: string; refreshToken?: string },
+  action: {
+    type: string;
+    roles?: string;
+    accessToken?: string;
+    refreshToken?: string;
+  },
 ) => {
   switch (action.type) {
     case 'LOG_IN':
       return {
         ...state,
+        roles: action.roles,
         accessToken: action.accessToken,
         refreshToken: action.refreshToken,
       };
     case 'LOG_OUT':
       return {
         ...state,
+        roles: 'freshen:user',
         accessToken: '',
         refreshToken: '',
       };

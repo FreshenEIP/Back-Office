@@ -2,7 +2,6 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
 import { createArticle } from '../../../api/brands';
-import config from '../../../config';
 import { Article } from './Article';
 
 interface FormValues {
@@ -13,6 +12,8 @@ interface FormValues {
 }
 
 const ArticleCreation = ({ brand }) => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const defaultValues = {
     name: '',
     cost: '0',
@@ -32,7 +33,7 @@ const ArticleCreation = ({ brand }) => {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (payload) => {
-    const token = config.TOKEN;
+    const token = logReducer.accessToken;
     const object = {
       name: payload.name,
       cost: parseFloat(payload.cost),

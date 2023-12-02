@@ -12,6 +12,7 @@ import { ConnectedForm } from '../ConnectedForm';
 interface Props {
   property: string;
   label: string;
+  disable?: boolean;
   pattern?: RegExp;
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
@@ -23,6 +24,7 @@ interface Props {
 export const InputString: React.FC<Props> = ({
   property,
   label,
+  disable = false,
   pattern = /^(?!\s*$).+/,
   endAdornment = null,
   startAdornment = null,
@@ -53,6 +55,7 @@ export const InputString: React.FC<Props> = ({
                 id={property}
                 label={label}
                 multiline={multiline}
+                disabled={disable}
                 startAdornment={
                   <InputAdornment position={'start'}>
                     {startAdornment}

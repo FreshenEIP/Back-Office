@@ -28,15 +28,17 @@ import { fetchReports } from '../api/reports';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
-import config from '../config';
 import { Report } from '../interface/report/report';
+import { useAppSelector } from '../redux/hooks';
 
 const Reports = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [status, setStatus] = useState('');
   const getReportList = useQuery(['reports', page, pageSize, status], () =>
-    fetchReports(config.TOKEN, page, pageSize, status),
+    fetchReports(logReducer.accessToken, page, pageSize, status),
   );
   const { data, isLoading, isError, isRefetching } = getReportList;
 
@@ -68,8 +70,6 @@ const Reports = () => {
 
   if (isError) return <div>Error ...</div>;
 
-  console.log(data);
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -85,7 +85,7 @@ const Reports = () => {
   };
 
   const handleConfirmation = (type, reportId, commentId, postId) => {
-    const token = config.TOKEN;
+    const token = logReducer.accessToken;
     if (type === 'comment') mutateComment({ token, reportId, commentId });
     else if (type === 'post') mutatePost({ token, reportId, postId });
   };
@@ -277,7 +277,6 @@ const Reports = () => {
 };
 
 const Toolbar = styled(Stack)`
-  background: white;
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 1rem;

@@ -6,6 +6,7 @@ import {
   Customer,
   Customers,
   Dashboard,
+  Login,
   Logout,
   News,
   Reports,
@@ -15,9 +16,9 @@ import { ProtectedRoutes, ProtectedRoutesAdmin } from './ProtectedRoutes';
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path={'/'} element={<Dashboard />} />
-      <Route path={'/signin'} element={<Dashboard />} />
+      <Route path={'/'} element={<Login />} />
       <Route element={<ProtectedRoutes />}>
+        <Route path={'/dashboard'} element={<Dashboard />} />
         <Route path={'/logout'} element={<Logout />} />
         <Route element={<ProtectedRoutesAdmin />}>
           <Route path={'/customers'} element={<Customers />} />

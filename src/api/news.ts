@@ -9,18 +9,23 @@ export const fetchNews = async (
     page,
     pageSize,
   });
-  console.log(response.data);
   return response.data;
 };
 
-// export const createNews = async (data): Promise<any> => {
-//   const { payload, token } = data;
-//   const response = await Axios.post('v2/', token, payload);
-//   return response.data;
-// };
+export const createNews = async (data): Promise<any> => {
+  const { payload, token } = data;
+  const response = await Axios.post('v2/news', token, payload);
+  return response.data;
+};
 
-export const deleteNews = async (data: { token: string; _id }) => {
-  const { token, _id } = data;
-  const response = await Axios.delete(`v2/`, token);
+export const updateNews = async (data): Promise<any> => {
+  const { payload, id, token } = data;
+  const response = await Axios.patch(`v2/news/${id}`, token, payload);
+  return response.data;
+};
+
+export const deleteNews = async (data: { token: string; id: string }) => {
+  const { token, id } = data;
+  const response = await Axios.delete(`v2/news/${id}`, token);
   return response.data;
 };

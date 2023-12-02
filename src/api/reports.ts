@@ -10,7 +10,7 @@ export const fetchReports = async (
   status = status === '' ? undefined : status;
   const response = await Axios.get('v2/report', token, {
     page,
-    pageSize,
+    page_size: pageSize,
     status,
   });
   return response.data;

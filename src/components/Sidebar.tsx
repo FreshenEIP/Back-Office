@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import SidebardItem from './SidebardItem';
 
 const Sidebar = () => {
+  //@ts-ignore
   const sidebarReducer = useAppSelector((state) => state.sidebarReducer);
   const dispatch = useAppDispatch();
 

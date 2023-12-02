@@ -15,7 +15,7 @@ export const fetchCustomers = async (
   if (roles === '') roles = undefined;
   const response = await Axios.get('v2/users', token, {
     page,
-    pageSize,
+    page_size: pageSize,
     friperie: type,
     username,
     roles,

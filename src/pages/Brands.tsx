@@ -19,15 +19,18 @@ import { deleteBrand, fetchBrands } from '../api/brands';
 import { Chip as BrandChip } from '../components/Brand/Chip';
 import BrandCreation from '../components/Modal/Brand/AddBrand';
 import BrandView from '../components/Modal/Brand/BrandView';
+import BrandUpdate from '../components/Modal/Brand/UpdateBrand';
 import { CustomDialog } from '../components/Modal/CustomDialog';
-import config from '../config';
 import { Brand } from '../interface/brand/brand';
+import { useAppSelector } from '../redux/hooks';
 
 const Brands = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const getBrandsList = useQuery(['brands', page, pageSize], () =>
-    fetchBrands(config.TOKEN, page, pageSize),
+    fetchBrands(logReducer.accessToken, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getBrandsList;
 
@@ -151,13 +154,35 @@ const Brands = () => {
                         </Stack>
                       </TableCell>
                       <TableCell align='center'>
-                        <Button
-                          onClick={() =>
-                            mutate({ token: config.TOKEN, brand: brand.brand })
-                          }
+                        <Stack
+                          direction={'row'}
+                          spacing={2}
+                          alignItems={'center'}
+                          justifyContent={'center'}
                         >
-                          Remove
-                        </Button>
+                          <Button
+                            variant={'outlined'}
+                            onClick={() =>
+                              mutate({
+                                token: logReducer.accessToken,
+                                brand: brand.brand,
+                              })
+                            }
+                          >
+                            Remove
+                          </Button>
+                          <CustomDialog
+                            header={'Brand update'}
+                            trigger={
+                              <Button variant={'outlined'}>Update</Button>
+                            }
+                          >
+                            <BrandUpdate
+                              brand={brand.brand}
+                              url={brand.photo}
+                            />
+                          </CustomDialog>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   );
@@ -186,7 +211,6 @@ const Brands = () => {
 };
 
 const Toolbar = styled(Stack)`
-  background: white;
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 1rem;

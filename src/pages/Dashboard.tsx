@@ -1,14 +1,16 @@
 import { useQuery } from 'react-query';
 import { fetchCustomers } from '../api/customers';
 import { StatusCard } from '../components/index';
-import config from '../config';
+import { useAppSelector } from '../redux/hooks';
 
 const Dashboard = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const getUserList = useQuery(['dashboard', 'user'], () =>
-    fetchCustomers(config.TOKEN, 0, 20, '', '', ''),
+    fetchCustomers(logReducer.accessToken, 0, 20, '', '', ''),
   );
   const getFriperieList = useQuery(['dashboard', 'friperie'], () =>
-    fetchCustomers(config.TOKEN, 0, 20, 'true', '', ''),
+    fetchCustomers(logReducer.accessToken, 0, 20, 'true', '', ''),
   );
 
   const {

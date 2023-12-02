@@ -10,7 +10,7 @@ const Logout = () => {
     dispatch(logAction.LogOut());
     toast.success('Successfully logout');
   }, [dispatch]);
-  return <Navigate to='/signin' />;
+  return <Navigate to='/' />;
 };
 
 export default Logout;

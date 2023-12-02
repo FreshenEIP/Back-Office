@@ -1,11 +1,7 @@
+import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
-import userImage from '../assets/images/user_image.jpg';
+import { useAppSelector } from '../redux/hooks';
 import Dropdown from './Dropdown';
-
-const currentUser = {
-  displayName: 'Alexis Fabarez',
-  image: userImage,
-};
 
 const renderUserToggle = (user) => (
   <div className='topnav__right-user'>
@@ -17,6 +13,9 @@ const renderUserToggle = (user) => (
 );
 
 const TopNav = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
+  const decoded: any = jwtDecode(logReducer.accessToken);
   return (
     <div className={'topnav'}>
       <div className={'topnav__search'}>
@@ -26,7 +25,14 @@ const TopNav = () => {
       <div className='topnav__status'></div>
       <div className='topnav__right'>
         <div className='topnav__right-item'>
-          <Dropdown customToggle={() => renderUserToggle(currentUser)} />
+          <Dropdown
+            customToggle={() =>
+              renderUserToggle({
+                image: decoded.profile_picture,
+                displayName: decoded.username,
+              })
+            }
+          />
         </div>
         <div className='topnav__right-item'>
           <Link to={'/logout'}>

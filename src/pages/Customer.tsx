@@ -25,10 +25,13 @@ import { FetchError } from '../components/FetchError';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import config from '../config';
+import { useAppSelector } from '../redux/hooks';
 
 const Posts = ({ userId }) => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const getPost = useQuery(['posts', userId], () =>
-    fetchUserPost(config.TOKEN, userId),
+    fetchUserPost(logReducer.accessToken, userId),
   );
 
   const { data, isLoading, isError } = getPost;

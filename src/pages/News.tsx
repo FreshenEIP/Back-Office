@@ -21,14 +21,18 @@ import { deleteNews, fetchNews } from '../api/news';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { TextView } from '../components/Modal/News/TextView';
+import NewsCreation from '../components/Modal/News/addNews';
+import NewsUpdate from '../components/Modal/News/updateNews';
 import { Chip } from '../components/User/Chip';
-import config from '../config';
+import { useAppSelector } from '../redux/hooks';
 
 const News = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const getNewsList = useQuery(['news', page, pageSize], () =>
-    fetchNews(config.TOKEN, page, pageSize),
+    fetchNews(logReducer.accessToken, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getNewsList;
 
@@ -56,6 +60,11 @@ const News = () => {
     setPage(newPage);
   };
 
+  const handleConfirmation = (newsId: string) => {
+    const token = logReducer.accessToken;
+    mutate({ token, id: newsId });
+  };
+
   return (
     <>
       <h2 className={'page-header'}>News</h2>
@@ -77,7 +86,7 @@ const News = () => {
               header={'News creation'}
               trigger={<Button variant={'outlined'}>Create</Button>}
             >
-              {/* <BrandCreation /> */}
+              <NewsCreation />
             </CustomDialog>
           </Box>
         </Stack>
@@ -123,7 +132,55 @@ const News = () => {
                         {dayjs(news.creationDate).format('DD-MM-YYYY hh:mm:ss')}
                       </TableCell>
                       <TableCell align='center'>
-                        <Button>Remove</Button>
+                        <Stack
+                          direction={'row'}
+                          spacing={2}
+                          alignItems={'center'}
+                          justifyContent={'center'}
+                        >
+                          <CustomDialog
+                            header={'News update'}
+                            trigger={
+                              <Button variant={'outlined'}>Update</Button>
+                            }
+                          >
+                            <NewsUpdate
+                              date={news.creationDate}
+                              id={news._id}
+                              title={news.title}
+                              text={news.text}
+                              image={news.image}
+                            />
+                          </CustomDialog>
+                          <CustomDialog
+                            header={`Supprimer ${news.title}`}
+                            trigger={
+                              <Button variant={'outlined'} color='error'>
+                                Delete
+                              </Button>
+                            }
+                          >
+                            <div>
+                              <Stack
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                spacing={2}
+                              >
+                                <Typography>
+                                  Êtes-vous sure de vouloir supprimer cette news
+                                  ?
+                                </Typography>
+                                <Button
+                                  variant={'outlined'}
+                                  color='error'
+                                  onClick={() => handleConfirmation(news._id)}
+                                >
+                                  Confirmer
+                                </Button>
+                              </Stack>
+                            </div>
+                          </CustomDialog>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   );
@@ -152,7 +209,6 @@ const News = () => {
 };
 
 const Toolbar = styled(Stack)`
-  background: white;
   border-radius: 6px;
   margin-bottom: 1rem;
   padding: 1rem;

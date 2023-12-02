@@ -8,7 +8,7 @@ export const fetchComments = async (
 ): Promise<CommentList> => {
   const response = await Axios.get('v2/comment', token, {
     page,
-    pageSize,
+    page_size: pageSize,
   });
   return response.data;
 };

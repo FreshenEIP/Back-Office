@@ -1,90 +1,18 @@
 import styled from '@emotion/styled';
-import {
-  Box,
-  Button,
-  IconButton,
-  Popover,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Popover, Stack } from '@mui/material';
 import { useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import {
-  RiAddCircleLine,
-  RiDeleteBin2Line,
-  RiImage2Fill,
-} from 'react-icons/ri';
+import { useFormContext } from 'react-hook-form';
+import { RiImage2Fill } from 'react-icons/ri';
 import { ConnectedForm } from '../../ConnectedForm';
 import { Image } from '../../Image';
 import { InputString } from '../../Input/InputString';
-import { InputNumber } from '../../Input/inputNumber';
 
 interface Props {
   onSubmit: (payload: any) => void;
   isUpdate?: boolean;
 }
 
-const Articles = ({ property, required = false, fullWidth = false }) => {
-  const { fields, append, remove } = useFieldArray({
-    name: property, // unique name for your Field Array
-  });
-
-  return (
-    <>
-      <ConnectedForm>
-        {() => (
-          <>
-            <Stack
-              direction={'row'}
-              width='100%'
-              justifyContent={'space-between'}
-            >
-              <Typography variant='h6'>Articles</Typography>
-              <IconButton
-                type='button'
-                onClick={() =>
-                  append({
-                    name: '',
-                    price: '',
-                  })
-                }
-              >
-                <RiAddCircleLine />
-              </IconButton>
-            </Stack>
-            {fields.map((f, index) => (
-              <Stack direction={'row'} key={f.id} width='100%'>
-                <Stack direction={'row'} width='100%' spacing={2}>
-                  <Box width={'100%'}>
-                    <InputString
-                      fullWidth={fullWidth}
-                      required={required}
-                      property={`${property}.${index}.name`}
-                      label={'Name'}
-                    />
-                  </Box>
-                  <Box width={'100%'}>
-                    <InputNumber
-                      fullWidth={fullWidth}
-                      required={required}
-                      property={`${property}.${index}.price`}
-                      label={'Price'}
-                    />
-                  </Box>
-                </Stack>
-                <IconButton type='button' onClick={() => remove(index)}>
-                  <RiDeleteBin2Line />
-                </IconButton>
-              </Stack>
-            ))}
-          </>
-        )}
-      </ConnectedForm>
-    </>
-  );
-};
-
-export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
+export const News: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
   const [anchor, setAnchor] = useState(null);
   const { watch } = useFormContext();
 
@@ -103,17 +31,16 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
           <Stack direction={'row'} width={'100%'} spacing={2}>
             <Box width={'40%'}>
               <InputString
-                property={'brand'}
-                label={'Name'}
-                disable={isUpdate ? true : false}
+                property={'title'}
+                label={'Title'}
                 required
                 fullWidth
               />
             </Box>
             <Box width={'60%'}>
               <InputString
-                property={'url'}
-                label={'Logo'}
+                property={'image'}
+                label={'Image'}
                 pattern={
                   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/
                 }
@@ -139,12 +66,23 @@ export const Brand: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
                         horizontal: 'left',
                       }}
                     >
-                      <Image src={watch('url')} alt={'item image'} />
+                      <Image src={watch('image')} alt={'item image'} />
                     </Popover>
                   </>
                 }
                 fullWidth
                 required
+              />
+            </Box>
+          </Stack>
+          <Stack direction={'row'} width={'100%'} spacing={2}>
+            <Box width={'100%'}>
+              <InputString
+                property={'text'}
+                label={'Text'}
+                required
+                fullWidth
+                multiline
               />
             </Box>
           </Stack>
