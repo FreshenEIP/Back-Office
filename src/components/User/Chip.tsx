@@ -1,7 +1,6 @@
 import { Avatar, Stack, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useCallback, useState } from 'react';
-import ReactCountryFlag from 'react-country-flag';
 import toast from 'react-hot-toast';
 import {
   RiCheckLine,
@@ -83,12 +82,6 @@ export const Chip: React.FC<Props> = ({
     </Tooltip>
   );
 };
-
-const Flag = styled(ReactCountryFlag)`
-  position: absolute;
-  bottom: -8px;
-  border-radius: 50%;
-`;
 
 const Copy = styled(RiFileCopyLine)`
   cursor: pointer;
