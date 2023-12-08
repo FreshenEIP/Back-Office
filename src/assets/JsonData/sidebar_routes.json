@@ -27,6 +27,11 @@
     {
         "display_name": "News",
         "route": "/news",
-        "icon": "bx bxs-t-shirt"
+        "icon": "bx bxs-news"
+    },
+    {
+        "display_name": "Suggestion",
+        "route": "/suggestion",
+        "icon": "bx bxs-inbox"
     }
 ]

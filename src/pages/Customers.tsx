@@ -22,7 +22,6 @@ import { banUser, fetchCustomers } from '../api/customers';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { RoleChip } from '../components/User/RoleChip';
-import config from '../config';
 import { Customers as User } from '../interface/customer/customer';
 import { useAppSelector } from '../redux/hooks';
 
@@ -99,7 +98,7 @@ const Customers = () => {
   };
 
   const handleConfirmation = (userId, block) => {
-    const token = config.TOKEN;
+    const token = logReducer.accessToken;
     mutate({ userId, block, token });
   };
 

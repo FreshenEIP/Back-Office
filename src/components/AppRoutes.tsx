@@ -10,6 +10,7 @@ import {
   Logout,
   News,
   Reports,
+  Suggestions,
 } from '../pages';
 import { ProtectedRoutes, ProtectedRoutesAdmin } from './ProtectedRoutes';
 
@@ -26,6 +27,7 @@ const AppRoutes = () => {
           <Route path={'/reports'} element={<Reports />} />
           <Route path={'/comments'} element={<Comments />} />
           <Route path={'/brands'} element={<Brands />} />
+          <Route path={'/suggestion'} element={<Suggestions />} />
         </Route>
         <Route path={'/news'} element={<News />} />
       </Route>
