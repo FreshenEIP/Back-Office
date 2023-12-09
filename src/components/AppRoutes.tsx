@@ -9,6 +9,7 @@ import {
   Login,
   Logout,
   News,
+  Profile,
   Reports,
   Suggestions,
 } from '../pages';
@@ -20,6 +21,7 @@ const AppRoutes = () => {
       <Route path={'/'} element={<Login />} />
       <Route element={<ProtectedRoutes />}>
         <Route path={'/dashboard'} element={<Dashboard />} />
+        <Route path={'/profile'} element={<Profile />} />
         <Route path={'/logout'} element={<Logout />} />
         <Route element={<ProtectedRoutesAdmin />}>
           <Route path={'/customers'} element={<Customers />} />

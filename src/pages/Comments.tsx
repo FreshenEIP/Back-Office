@@ -110,7 +110,11 @@ const Comments = () => {
                   return (
                     <TableRow>
                       <TableCell align='center'>
-                        <UserChip user={comment.user} clickable={false} />
+                        {comment.user === undefined ? (
+                          <></>
+                        ) : (
+                          <UserChip user={comment.user} clickable={false} />
+                        )}
                       </TableCell>
                       <TableCell>{comment.postId}</TableCell>
                       <TableCell>{comment.like.length}</TableCell>

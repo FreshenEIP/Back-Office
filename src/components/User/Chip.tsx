@@ -57,7 +57,7 @@ export const Chip: React.FC<Props> = ({
         <Stack direction='row' spacing={1} alignItems='center'>
           <Stack alignItems='center' sx={{ position: 'relative' }}>
             <Avatar
-              alt={user.username}
+              alt={user.username === undefined ? '-' : user.username}
               src={user.profile_picture}
               sx={{ width: avatarSize }}
             />
@@ -70,7 +70,9 @@ export const Chip: React.FC<Props> = ({
             /> */}
           </Stack>
           <Stack direction='row' alignItems='center' spacing={0.5}>
-            <Typography variant='body2'>{user.username}</Typography>
+            <Typography variant='body2'>
+              {user.username === undefined ? '-' : user.username}
+            </Typography>
             {user.banned ? (
               <RiSpam3Fill color='#BA0F30' />
             ) : (
