@@ -1,16 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
-
-const renderUserToggle = (user) => (
-  <div className='topnav__right-user'>
-    <div className='topnav__right-user__image'>
-      <img src={user.image} alt='' />
-    </div>
-    <div className='topnav__right-user__name'>{user.displayName}</div>
-  </div>
-);
 
 const TopNav = () => {
   //@ts-ignore
