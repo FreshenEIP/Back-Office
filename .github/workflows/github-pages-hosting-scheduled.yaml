@@ -6,9 +6,9 @@ on:
 
 strategy:
   matrix:
+    node-version: [12.x]
 
 jobs:
-    node-version: [12.x]
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
