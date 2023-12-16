@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "src/index.ts",
-  "homepage": ".",
+  "homepage": "http://dashboard.freshen.fr/dashboard",
   "dependencies": {
     "@date-io/dayjs": "^2.13.1",
     "@emotion/react": "^11.11.1",
