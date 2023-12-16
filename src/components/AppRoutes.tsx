@@ -1,5 +1,5 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import {
   Brands,
   Comments,
@@ -14,6 +14,7 @@ import {
   Suggestions,
 } from '../pages';
 import { ProtectedRoutes, ProtectedRoutesAdmin } from './ProtectedRoutes';
+import React from 'react';
 
 const AppRoutes = () => {
   return (
