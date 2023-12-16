@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import React from 'react';
 import { FunctionComponent } from 'react';
 
 interface ImageProps {

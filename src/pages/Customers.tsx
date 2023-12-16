@@ -15,14 +15,15 @@ import {
   Typography,
 } from '@mui/material';
 import dayjs from 'dayjs';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
-import { banUser, fetchCustomers } from '../api/customers';
+import { useMutation } from 'react-query';
+import { banUser } from '../api/customers';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { RoleChip } from '../components/User/RoleChip';
 import { Customers as User } from '../interface/customer/customer';
+import { useFetchCustomers } from '../query/Customers';
 import { useAppSelector } from '../redux/hooks';
 
 const Customers = () => {
@@ -33,17 +34,13 @@ const Customers = () => {
   const [type, setType] = useState<string>('');
   const [roles, setRoles] = useState<string>('');
   const [username, setUsername] = useState<string>('');
-  const getUserList = useQuery(
-    ['customers', page, pageSize, type, username, roles],
-    () =>
-      fetchCustomers(
-        logReducer.accessToken,
-        page,
-        pageSize,
-        type,
-        username,
-        roles,
-      ),
+  const getUserList = useFetchCustomers(
+    logReducer.accessToken,
+    page,
+    pageSize,
+    type,
+    username,
+    roles,
   );
 
   const { mutate } = useMutation(banUser, {
@@ -81,7 +78,10 @@ const Customers = () => {
     [getUserList],
   );
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='users-error'>Error ...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='users-loading'>Loading...</div>;
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -166,86 +166,85 @@ const Customers = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data!.data.map((user: User, idx: number) => {
-                  return (
-                    <TableRow key={user._id}>
-                      <TableCell align='center'>
-                        <UserChip user={user} clickable={true} />
-                      </TableCell>
-                      <TableCell>
-                        <RoleChip
-                          userList={getUserList}
-                          userId={user._id}
-                          roles={user.roles}
-                        />
-                      </TableCell>
-                      <TableCell>{user.friperie.toString()}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>{user.follow.length}</TableCell>
-                      <TableCell>{user.followers.length}</TableCell>
-                      <TableCell>
-                        {dayjs(user.creationDate).format('DD-MM-YYYY hh:mm:ss')}
-                      </TableCell>
-                      <TableCell>
-                        <>
-                          <CustomDialog
-                            header={`Ban ${user.username}`}
-                            trigger={
-                              <Button variant={'outlined'} color='error'>
-                                {user.banned ? <>Unban</> : <>Ban</>}
-                              </Button>
-                            }
-                          >
-                            <div>
-                              <Stack
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                spacing={2}
+              {data!.data.map((user: User, idx: number) => {
+                return (
+                  <TableRow data-testid={'customers-rows'} key={user._id}>
+                    <TableCell align='center'>
+                      <UserChip
+                        data-testid={`user-${user._id}`}
+                        user={user}
+                        clickable={true}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <RoleChip
+                        userList={getUserList}
+                        userId={user._id}
+                        roles={user.roles}
+                      />
+                    </TableCell>
+                    <TableCell>{user.friperie.toString()}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.follow.length}</TableCell>
+                    <TableCell>{user.followers.length}</TableCell>
+                    <TableCell>
+                      {dayjs(user.creationDate).format('DD-MM-YYYY hh:mm:ss')}
+                    </TableCell>
+                    <TableCell>
+                      <>
+                        <CustomDialog
+                          header={`Ban ${user.username}`}
+                          trigger={
+                            <Button
+                              variant={'outlined'}
+                              color={user.banned ? 'success' : 'error'}
+                            >
+                              {user.banned ? 'Unban' : 'Ban'}
+                            </Button>
+                          }
+                        >
+                          <div>
+                            <Stack
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              spacing={2}
+                            >
+                              <Typography>
+                                Êtes-vous sure de vouloir{' '}
+                                {user.banned ? <>Unban</> : <>Ban</>} cet
+                                utilisateur ({user.username}) ?
+                              </Typography>
+                              <Button
+                                variant={'outlined'}
+                                color='error'
+                                onClick={() =>
+                                  handleConfirmation(user._id, user.banned)
+                                }
                               >
-                                <Typography>
-                                  Êtes-vous sure de vouloir{' '}
-                                  {user.banned ? <>Unban</> : <>Ban</>} cet
-                                  utilisateur ({user.username}) ?
-                                </Typography>
-                                <Button
-                                  variant={'outlined'}
-                                  color='error'
-                                  onClick={() =>
-                                    handleConfirmation(user._id, user.banned)
-                                  }
-                                >
-                                  Confirmer
-                                </Button>
-                              </Stack>
-                            </div>
-                          </CustomDialog>
-                        </>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                                Confirmer
+                              </Button>
+                            </Stack>
+                          </div>
+                        </CustomDialog>
+                      </>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      {isLoading ? (
-        <></>
-      ) : (
-        <TablePagination
-          component='div'
-          showFirstButton
-          showLastButton
-          count={data!.count}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      )}
+      <TablePagination
+        component='div'
+        showFirstButton
+        showLastButton
+        count={data!.count}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </>
   );
 };

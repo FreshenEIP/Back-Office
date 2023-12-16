@@ -6,6 +6,7 @@ import { RiImage2Fill } from 'react-icons/ri';
 import { ConnectedForm } from '../../ConnectedForm';
 import { Image } from '../../Image';
 import { InputString } from '../../Input/InputString';
+import React from 'react';
 
 interface Props {
   onSubmit: (payload: any) => void;

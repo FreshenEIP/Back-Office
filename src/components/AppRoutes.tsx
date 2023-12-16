@@ -14,6 +14,7 @@ import {
   Suggestions,
 } from '../pages';
 import { ProtectedRoutes, ProtectedRoutesAdmin } from './ProtectedRoutes';
+import React from 'react';
 
 const AppRoutes = () => {
   return (

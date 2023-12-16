@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Container, Stack, Typography, useTheme } from '@mui/material';
+import React from 'react';
 import { FiInbox } from 'react-icons/fi';
 
 export const FetchError: React.FC = () => {

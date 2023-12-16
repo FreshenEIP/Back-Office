@@ -23,6 +23,7 @@ import BrandUpdate from '../components/Modal/Brand/UpdateBrand';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Brand } from '../interface/brand/brand';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const Brands = () => {
   //@ts-ignore

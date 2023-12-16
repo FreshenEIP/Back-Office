@@ -1,3 +1,5 @@
+import React from 'react';
+
 const StatusCard = ({ icon, count, title }) => {
   return (
     <div className={'status-card'}>

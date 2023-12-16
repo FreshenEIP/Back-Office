@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import '../assets/css/thememenu.css';
 import themeAction from '../redux/actions/themeActions';
+import React from 'react';
 
 const mode_settings = [
   {

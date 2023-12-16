@@ -5,10 +5,10 @@ const logReducer = (
     refreshToken: '',
   },
   action: {
-    type: string;
-    roles?: string;
-    accessToken?: string;
-    refreshToken?: string;
+    type: string,
+    roles?: string,
+    accessToken?: string,
+    refreshToken?: string,
   },
 ) => {
   switch (action.type) {

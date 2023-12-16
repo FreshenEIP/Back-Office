@@ -1,3 +1,4 @@
+import React from 'react';
 import { useRef } from 'react';
 
 const clickOutsideRef = (content_ref, toggle_ref) => {

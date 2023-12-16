@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { updateNews } from '../../../api/news';
 import { useAppSelector } from '../../../redux/hooks';
 import { News } from './News';
+import React from 'react';
 
 interface FormValues {
   title: string;

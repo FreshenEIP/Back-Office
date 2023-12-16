@@ -1,12 +1,14 @@
 import { Stack, Typography } from '@mui/material';
+import React from 'react';
 import toast from 'react-hot-toast';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useMutation } from 'react-query';
 import { updateCustomerRoles } from '../../api/customers';
-import config from '../../config';
+import { useAppSelector } from '../../redux/hooks';
 
 export const RoleChip = ({ userList, userId, roles }) => {
-  const token = config.TOKEN;
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
 
   const { mutate } = useMutation(updateCustomerRoles, {
     onSuccess: (res) => {
@@ -19,6 +21,7 @@ export const RoleChip = ({ userList, userId, roles }) => {
   });
 
   const handleUpdate = async (roles) => {
+    const token = logReducer.accessToken;
     mutate({ token, userId, roles });
   };
 

@@ -11,6 +11,7 @@ import { useMutation, useQuery } from 'react-query';
 import { deleteArticle, fetchBrand } from '../../../api/brands';
 import config from '../../../config';
 import ArticleCreation from './AddArticle';
+import React from 'react';
 
 const BrandView = ({ brand }) => {
   const [view, setView] = useState('brand');

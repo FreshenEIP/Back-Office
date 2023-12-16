@@ -11,10 +11,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { fetchSuggestions } from '../api/suggestion';
+import React, { useState } from 'react';
 import { Chip as UserChip } from '../components/User/Chip';
+import { useFetchSuggestions } from '../query/Suggestions';
 import { useAppSelector } from '../redux/hooks';
 
 const Suggestions = () => {
@@ -22,13 +21,18 @@ const Suggestions = () => {
   const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(25);
-  const getSuggestionList = useQuery(['suggestions', page, pageSize], () =>
-    fetchSuggestions(logReducer.accessToken, page, pageSize),
+  const getSuggestionList = useFetchSuggestions(
+    logReducer.accessToken,
+    page,
+    pageSize,
   );
 
   const { data, isLoading, isRefetching, isError } = getSuggestionList;
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='suggestions-error'>Error ...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='suggestions-loading'>Loading...</div>;
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -67,38 +71,32 @@ const Suggestions = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data!.data.map((suggestion: any, idx: number) => {
-                  return (
-                    <TableRow key={suggestion._id}>
-                      <TableCell align='center'>
-                        <UserChip user={suggestion.user} clickable />
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{suggestion.brand}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{suggestion.article}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{suggestion.price}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{suggestion.comment}</Typography>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+              {data!.data.map((suggestion: any, idx: number) => {
+                return (
+                  <TableRow key={suggestion._id} data-testid='suggestions-rows'>
+                    <TableCell align='center'>
+                      <UserChip user={suggestion.user} clickable />
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{suggestion.brand}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{suggestion.article}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{suggestion.price}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{suggestion.comment}</Typography>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      {isLoading ? (
-        <></>
-      ) : (
+      {
         <TablePagination
           component='div'
           showFirstButton
@@ -109,7 +107,7 @@ const Suggestions = () => {
           rowsPerPage={pageSize}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      )}
+      }
     </>
   );
 };

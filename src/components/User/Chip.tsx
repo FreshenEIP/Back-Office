@@ -1,6 +1,6 @@
 import { Avatar, Stack, Tooltip, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import {
   RiCheckLine,
@@ -74,9 +74,9 @@ export const Chip: React.FC<Props> = ({
               {user.username === undefined ? '-' : user.username}
             </Typography>
             {user.banned ? (
-              <RiSpam3Fill color='#BA0F30' />
+              <RiSpam3Fill data-testid='bannedIcon' color='#BA0F30' />
             ) : (
-              <RiShieldCheckFill color='#00A300' />
+              <RiShieldCheckFill data-testid='bannedIcon' color='#00A300' />
             )}
           </Stack>
         </Stack>

@@ -3,6 +3,7 @@ import { Box, Button, Stack } from '@mui/material';
 import { ConnectedForm } from '../../ConnectedForm';
 import { InputString } from '../../Input/InputString';
 import { InputNumber } from '../../Input/inputNumber';
+import React from 'react';
 
 interface Props {
   onSubmit: (payload: any) => void;

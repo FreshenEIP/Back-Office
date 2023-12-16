@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { Navigate } from 'react-router-dom';
 import logAction from '../redux/actions/logAction';
 import { useAppDispatch } from '../redux/hooks';
+import React from 'react';
 
 const Logout = () => {
   const dispatch = useAppDispatch();

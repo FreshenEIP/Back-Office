@@ -18,6 +18,7 @@ import { fetchComments } from '../api/comments';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Comment } from '../interface/comment/comment';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const Comments = () => {
   //@ts-ignore

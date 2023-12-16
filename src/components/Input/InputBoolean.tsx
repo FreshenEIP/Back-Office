@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { ConnectedForm } from '../ConnectedForm';
+import React from 'react';
 
 interface Props {
   property: string;

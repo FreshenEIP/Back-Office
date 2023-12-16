@@ -1,6 +1,6 @@
 const sidebarReducer = (
   state = { index: 0 },
-  action: { type: string; index: number },
+  action: { type: string, index: number },
 ) => {
   switch (action.type) {
     case 'SET_SIDEBAR_INDEX':

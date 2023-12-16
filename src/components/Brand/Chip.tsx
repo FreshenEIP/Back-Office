@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { RiCheckLine, RiFileCopyLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import { Brand } from '../../interface/brand/brand';
+import React from 'react';
 
 interface Props {
   brand: Brand;

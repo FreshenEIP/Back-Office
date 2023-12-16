@@ -1,3 +1,5 @@
+import React from 'react';
+
 const SidebardItem = (props) => {
   const active = props.active ? 'active' : '';
 

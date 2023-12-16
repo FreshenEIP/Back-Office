@@ -12,6 +12,7 @@ import './assets/css/grid.css';
 import './assets/css/index.css';
 import './assets/css/theme.css';
 import { persistor, store } from './redux/store';
+import React from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: {

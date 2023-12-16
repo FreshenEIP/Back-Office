@@ -30,6 +30,7 @@ import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Report } from '../interface/report/report';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const Reports = () => {
   //@ts-ignore

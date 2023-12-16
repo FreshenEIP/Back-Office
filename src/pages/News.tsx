@@ -25,6 +25,7 @@ import NewsCreation from '../components/Modal/News/addNews';
 import NewsUpdate from '../components/Modal/News/updateNews';
 import { Chip } from '../components/User/Chip';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const News = () => {
   //@ts-ignore

@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import { fetchCustomers } from '../api/customers';
 import { StatusCard } from '../components/index';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const Dashboard = () => {
   //@ts-ignore

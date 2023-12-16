@@ -24,8 +24,8 @@ import { fetchUserPost } from '../api/post';
 import { FetchError } from '../components/FetchError';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
-import config from '../config';
 import { useAppSelector } from '../redux/hooks';
+import React from 'react';
 
 const Posts = ({ userId }) => {
   //@ts-ignore
@@ -77,10 +77,12 @@ const Posts = ({ userId }) => {
 };
 
 const Customer = () => {
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
   const { userId } = useParams();
 
   const getUser = useQuery(['customer', userId], () =>
-    fetchCustomerById(config.TOKEN, userId),
+    fetchCustomerById(logReducer.accessToken, userId),
   );
 
   const { mutate } = useMutation(banUser, {
@@ -93,7 +95,7 @@ const Customer = () => {
   });
 
   const handleConfirmation = (userId, block) => {
-    const token = config.TOKEN;
+    const token = logReducer.accessToken;
     mutate({ userId, block, token });
   };
 

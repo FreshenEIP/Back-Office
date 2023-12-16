@@ -13,6 +13,7 @@ import logo from '../assets/images/logo.png';
 import sidebarAction from '../redux/actions/sidebarAction';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import SidebardItem from './SidebardItem';
+import React from 'react';
 
 const Sidebar = () => {
   //@ts-ignore

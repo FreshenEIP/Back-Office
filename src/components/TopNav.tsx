@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
-import Dropdown from './Dropdown';
+import React from 'react';
 
 const renderUserToggle = (user) => (
   <div className='topnav__right-user'>
@@ -25,14 +25,12 @@ const TopNav = () => {
       <div className='topnav__status'></div>
       <div className='topnav__right'>
         <div className='topnav__right-item'>
-          <Dropdown
-            customToggle={() =>
-              renderUserToggle({
-                image: decoded.profile_picture,
-                displayName: decoded.username,
-              })
-            }
-          />
+          <Link className='topnav__right-user' to={'/profile'}>
+            <div className='topnav__right-user__image'>
+              <img src={decoded.profile_picture} alt='' />
+            </div>
+            <div className='topnav__right-user__name'>{decoded.username}</div>
+          </Link>
         </div>
         <div className='topnav__right-item'>
           <Link to={'/logout'}>

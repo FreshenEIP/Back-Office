@@ -1,3 +1,4 @@
+import React from 'react';
 import './assets/css/badge.css';
 import './assets/css/dropdown.css';
 import './assets/css/layout.css';

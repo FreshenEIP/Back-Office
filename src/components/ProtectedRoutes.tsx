@@ -3,6 +3,7 @@ import logAction from '../redux/actions/logAction';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Sidebar from './Sidebar';
 import TopNav from './TopNav';
+import React from 'react';
 
 export const ProtectedRoutes = (props) => {
   //@ts-ignore
