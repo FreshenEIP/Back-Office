@@ -9,16 +9,18 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { fetchComments } from '../api/comments';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useMutation, useQuery } from 'react-query';
+import { fetchComments, removeComment } from '../api/comments';
+import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Comment } from '../interface/comment/comment';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const Comments = () => {
   //@ts-ignore
@@ -29,6 +31,15 @@ const Comments = () => {
     fetchComments(logReducer.accessToken, page, pageSize),
   );
   const { data, isLoading, isError, isRefetching } = getCommentList;
+
+  const { mutate } = useMutation(removeComment, {
+    onSuccess: (res) => {
+      toast.success('Comment succesfuly deleted');
+    },
+    onError: () => {
+      toast.error('Error while deleting comment');
+    },
+  });
 
   if (isError) return <div>Error ...</div>;
 
@@ -46,6 +57,11 @@ const Comments = () => {
     setPage(newPage);
   };
 
+  const handleConfirmation = (commentId) => {
+    const token = logReducer.accessToken;
+    mutate({ token, undefined, commentId });
+  };
+
   return (
     <>
       <h2 className={'page-header'}>Comments</h2>
@@ -61,34 +77,7 @@ const Comments = () => {
           alignItems={'center'}
           justifyContent={'space-between'}
           spacing={2}
-        >
-          {/* <TextField size='small' label='User ID'></TextField>
-          <FormControl sx={{ 'min-width': '120px' }} size='small'>
-            <InputLabel id='select-status-label'>Status</InputLabel>
-            <Select
-              labelId='select-status-label'
-              id='select-status'
-              value={status}
-              label='Status'
-              onChange={handleChangeStatus}
-            >
-              <MenuItem value={''}>All</MenuItem>
-              <MenuItem value={'opened'}>Opened</MenuItem>
-              <MenuItem value={'closed'}>Closed</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            size='small'
-            select
-            label='Type'
-            sx={{ minWidth: '120px' }}
-          >
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='user'>User</MenuItem>
-            <MenuItem value='post'>Post</MenuItem>
-            <MenuItem value='comment'>Comment</MenuItem>
-          </TextField> */}
-        </Stack>
+        ></Stack>
       </Toolbar>
       <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
         <TableContainer sx={{ borderRadius: '6px' }}>
@@ -96,11 +85,11 @@ const Comments = () => {
             <TableHead>
               <TableRow>
                 <TableCell>User</TableCell>
-                <TableCell>PostId</TableCell>
+                <TableCell>Message</TableCell>
                 <TableCell>Like</TableCell>
                 <TableCell>Reply</TableCell>
                 <TableCell>Creation Date</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -117,7 +106,7 @@ const Comments = () => {
                           <UserChip user={comment.user} clickable={false} />
                         )}
                       </TableCell>
-                      <TableCell>{comment.postId}</TableCell>
+                      <TableCell>{comment.message}</TableCell>
                       <TableCell>{comment.like.length}</TableCell>
                       <TableCell>{comment.reply.length}</TableCell>
                       <TableCell>
@@ -128,7 +117,39 @@ const Comments = () => {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Button>Remove</Button>
+                        <>
+                          <CustomDialog
+                            header={'Supprimer commentaire'}
+                            trigger={
+                              <Button variant={'outlined'} color='error'>
+                                Delete
+                              </Button>
+                            }
+                          >
+                            <div>
+                              <Stack
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                                spacing={2}
+                              >
+                                <Typography>
+                                  Êtes-vous sure de vouloir supprimer ce
+                                  commentaire ?
+                                </Typography>
+                                <Typography>{comment.message}</Typography>
+                                <Button
+                                  variant={'outlined'}
+                                  color='error'
+                                  onClick={() =>
+                                    handleConfirmation(comment._id)
+                                  }
+                                >
+                                  Confirmer
+                                </Button>
+                              </Stack>
+                            </div>
+                          </CustomDialog>
+                        </>
                       </TableCell>
                     </TableRow>
                   );

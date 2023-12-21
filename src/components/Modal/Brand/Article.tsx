@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { Box, Button, Stack } from '@mui/material';
-import { ConnectedForm } from '../../ConnectedForm';
-import { InputString } from '../../Input/InputString';
-import { InputNumber } from '../../Input/inputNumber';
+import { Box, Button, MenuItem, Stack } from '@mui/material';
 import React from 'react';
+import { ConnectedForm } from '../../ConnectedForm';
+import { InputSimpleSelect } from '../../Input/InputSimpleSelect';
+import { InputNumber } from '../../Input/inputNumber';
 
 interface Props {
   onSubmit: (payload: any) => void;
@@ -18,12 +18,19 @@ export const Article: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
           <Stack width='100%' spacing={2}>
             <Stack direction={'row'} width='100%' spacing={2}>
               <Box width={'100%'}>
-                <InputString
+                <InputSimpleSelect
                   fullWidth
                   required
                   property={`name`}
                   label={'Name'}
-                />
+                >
+                  <MenuItem value='cap'>Cap</MenuItem>
+                  <MenuItem value='hoodie'>Hoodie</MenuItem>
+                  <MenuItem value='jean'>Jean</MenuItem>
+                  <MenuItem value='polo'>Polo</MenuItem>
+                  <MenuItem value='shirt'>Shirt</MenuItem>
+                  <MenuItem value='short'>Short</MenuItem>
+                </InputSimpleSelect>
               </Box>
             </Stack>
             <Stack direction={'row'} width='100%' spacing={2}>

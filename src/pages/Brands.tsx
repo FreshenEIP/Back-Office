@@ -8,11 +8,10 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
 import { deleteBrand, fetchBrands } from '../api/brands';
@@ -23,7 +22,6 @@ import BrandUpdate from '../components/Modal/Brand/UpdateBrand';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Brand } from '../interface/brand/brand';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const Brands = () => {
   //@ts-ignore
@@ -75,32 +73,6 @@ const Brands = () => {
           justifyContent={'space-between'}
           spacing={2}
         >
-          {/* <TextField size='small' label='User ID'></TextField>
-          <FormControl sx={{ 'min-width': '120px' }} size='small'>
-            <InputLabel id='select-status-label'>Status</InputLabel>
-            <Select
-              labelId='select-status-label'
-              id='select-status'
-              value={status}
-              label='Status'
-              onChange={handleChangeStatus}
-            >
-              <MenuItem value={''}>All</MenuItem>
-              <MenuItem value={'opened'}>Opened</MenuItem>
-              <MenuItem value={'closed'}>Closed</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            size='small'
-            select
-            label='Type'
-            sx={{ minWidth: '120px' }}
-          >
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='user'>User</MenuItem>
-            <MenuItem value='post'>Post</MenuItem>
-            <MenuItem value='comment'>Comment</MenuItem>
-          </TextField> */}
           <Box>
             <CustomDialog
               header={'Brand creation'}
@@ -193,7 +165,7 @@ const Brands = () => {
           </Table>
         </TableContainer>
       </Paper>
-      {isLoading ? (
+      {/* {isLoading ? (
         <></>
       ) : (
         <TablePagination
@@ -206,7 +178,7 @@ const Brands = () => {
           rowsPerPage={pageSize}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      )}
+      )} */}
     </>
   );
 };
