@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import { toast } from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
 import { deleteBrand, fetchBrands } from '../api/brands';
@@ -26,10 +26,10 @@ import { useAppSelector } from '../redux/hooks';
 const Brands = () => {
   //@ts-ignore
   const logReducer = useAppSelector((state) => state.logReducer);
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(25);
-  const getBrandsList = useQuery(['brands', page, pageSize], () =>
-    fetchBrands(logReducer.accessToken, page, pageSize),
+  // const [page, setPage] = useState(0);
+  // const [pageSize, setPageSize] = useState(25);
+  const getBrandsList = useQuery(['brands', 0, 25], () =>
+    fetchBrands(logReducer.accessToken, 0, 25),
   );
   const { data, isLoading, isError, isRefetching } = getBrandsList;
 
@@ -43,19 +43,19 @@ const Brands = () => {
 
   if (isError) return <div>Error ...</div>;
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setPageSize(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (
+  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  // ) => {
+  //   setPageSize(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (
+  //   event: React.MouseEvent<HTMLButtonElement> | null,
+  //   newPage: number,
+  // ) => {
+  //   setPage(newPage);
+  // };
 
   return (
     <>
