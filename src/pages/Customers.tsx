@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';
+import { Link } from 'react-router-dom';
 import { banUser } from '../api/customers';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
@@ -183,7 +184,17 @@ const Customers = () => {
                         roles={user.roles}
                       />
                     </TableCell>
-                    <TableCell>{user.friperie.toString()}</TableCell>
+                    <TableCell>
+                      <Stack>
+                        <Typography>{user.friperie.toString()}</Typography>
+                        <Link
+                          to={'https://avis-situation-sirene.insee.fr/'}
+                          target='_blank'
+                        >
+                          {user.siret}
+                        </Link>
+                      </Stack>
+                    </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.follow.length}</TableCell>
                     <TableCell>{user.followers.length}</TableCell>

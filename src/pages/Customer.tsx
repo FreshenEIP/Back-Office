@@ -15,6 +15,7 @@ import {
   styled,
 } from '@mui/material';
 import dayjs from 'dayjs';
+import React from 'react';
 import toast from 'react-hot-toast';
 import { RiShieldCheckFill, RiSpam3Fill } from 'react-icons/ri';
 import { useMutation, useQuery } from 'react-query';
@@ -25,7 +26,6 @@ import { FetchError } from '../components/FetchError';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const Posts = ({ userId }) => {
   //@ts-ignore

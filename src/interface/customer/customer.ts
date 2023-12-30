@@ -37,4 +37,5 @@ export interface Customers {
   username: string;
   locale: string;
   roles: Array<string>;
+  siret?: string;
 }
