@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
 import { removeComment } from '../api/comments';
@@ -30,7 +30,6 @@ import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Report } from '../interface/report/report';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const Reports = () => {
   //@ts-ignore
@@ -64,8 +63,8 @@ const Reports = () => {
     onSuccess: (res) => {
       toast.success('Comment succesfuly deleted');
     },
-    onError: () => {
-      toast.error('Error while deleting comment');
+    onError: (error: any) => {
+      toast.error(error.response.data.message);
     },
   });
 
@@ -154,105 +153,110 @@ const Reports = () => {
                 <></>
               ) : (
                 data!.data.map((report: Report, idx: number) => {
-                  return (
-                    <TableRow>
-                      <TableCell align='center'>
-                        <UserChip
-                          user={report.reporterUser}
-                          clickable={false}
-                        />
-                      </TableCell>
-                      <TableCell align='center'>
-                        <UserChip user={report.reportedUser} />
-                      </TableCell>
-                      <TableCell>
-                        {report.status === 'opened' ? (
-                          <Chip label='Opened' color='success' />
-                        ) : (
-                          <Chip label='Closed' color='error' />
-                        )}
-                      </TableCell>
-                      <TableCell>{report.type}</TableCell>
-                      <TableCell>Content</TableCell>
-                      <TableCell>
-                        <div>
-                          {dayjs(report.createdAt).format(
-                            'DD-MM-YYYY hh:mm:ss',
+                  if (
+                    report.post ||
+                    report.comment ||
+                    report.status === 'closed'
+                  )
+                    return (
+                      <TableRow>
+                        <TableCell align='center'>
+                          <UserChip
+                            user={report.reporterUser}
+                            clickable={false}
+                          />
+                        </TableCell>
+                        <TableCell align='center'>
+                          <UserChip user={report.reportedUser} />
+                        </TableCell>
+                        <TableCell>
+                          {report.status === 'opened' ? (
+                            <Chip label='Opened' color='success' />
+                          ) : (
+                            <Chip label='Closed' color='error' />
                           )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {report.status === 'opened' ? (
-                          <>
-                            <CustomDialog
-                              header={`Supprimer ${report.type}`}
-                              trigger={
-                                <Button variant={'outlined'} color='error'>
-                                  Delete
-                                </Button>
-                              }
-                            >
-                              <div>
-                                <Stack
-                                  justifyContent={'center'}
-                                  alignItems={'center'}
-                                  spacing={2}
-                                >
-                                  <Typography>
-                                    Êtes-vous sure de vouloir supprimer ce{' '}
-                                    {report.type} ?
-                                  </Typography>
-                                  {report.type === 'comment' ? (
-                                    <>
-                                      <Typography>
-                                        {report.comment.message}
-                                      </Typography>
-                                      <Button
-                                        variant={'outlined'}
-                                        color='error'
-                                        onClick={() =>
-                                          handleConfirmation(
-                                            report.type,
-                                            report._id,
-                                            report.comment._id,
-                                            undefined,
-                                          )
-                                        }
-                                      >
-                                        Confirmer
-                                      </Button>
-                                    </>
-                                  ) : (
-                                    <>
-                                      {report.post.photos.map((url) => {
-                                        return <Image src={url} alt={url} />;
-                                      })}
-                                      <Button
-                                        variant={'outlined'}
-                                        color='error'
-                                        onClick={() =>
-                                          handleConfirmation(
-                                            report.type,
-                                            report._id,
-                                            undefined,
-                                            report.post._id,
-                                          )
-                                        }
-                                      >
-                                        Confirmer
-                                      </Button>
-                                    </>
-                                  )}
-                                </Stack>
-                              </div>
-                            </CustomDialog>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
+                        </TableCell>
+                        <TableCell>{report.type}</TableCell>
+                        <TableCell>Content</TableCell>
+                        <TableCell>
+                          <div>
+                            {dayjs(report.createdAt).format(
+                              'DD-MM-YYYY hh:mm:ss',
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {report.status === 'opened' ? (
+                            <>
+                              <CustomDialog
+                                header={`Supprimer ${report.type}`}
+                                trigger={
+                                  <Button variant={'outlined'} color='error'>
+                                    Delete
+                                  </Button>
+                                }
+                              >
+                                <div>
+                                  <Stack
+                                    justifyContent={'center'}
+                                    alignItems={'center'}
+                                    spacing={2}
+                                  >
+                                    <Typography>
+                                      Êtes-vous sure de vouloir supprimer ce{' '}
+                                      {report.type} ?
+                                    </Typography>
+                                    {report.type === 'comment' ? (
+                                      <>
+                                        <Typography>
+                                          {report.comment.message}
+                                        </Typography>
+                                        <Button
+                                          variant={'outlined'}
+                                          color='error'
+                                          onClick={() =>
+                                            handleConfirmation(
+                                              report.type,
+                                              report._id,
+                                              report.comment._id,
+                                              undefined,
+                                            )
+                                          }
+                                        >
+                                          Confirmer
+                                        </Button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {report.post.photos.map((url) => {
+                                          return <Image src={url} alt={url} />;
+                                        })}
+                                        <Button
+                                          variant={'outlined'}
+                                          color='error'
+                                          onClick={() =>
+                                            handleConfirmation(
+                                              report.type,
+                                              report._id,
+                                              undefined,
+                                              report.post._id,
+                                            )
+                                          }
+                                        >
+                                          Confirmer
+                                        </Button>
+                                      </>
+                                    )}
+                                  </Stack>
+                                </div>
+                              </CustomDialog>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
                 })
               )}
             </TableBody>

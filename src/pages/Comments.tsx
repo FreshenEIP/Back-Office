@@ -36,8 +36,8 @@ const Comments = () => {
     onSuccess: (res) => {
       toast.success('Comment succesfuly deleted');
     },
-    onError: () => {
-      toast.error('Error while deleting comment');
+    onError: (error: any) => {
+      toast.error(error.response.data.message);
     },
   });
 

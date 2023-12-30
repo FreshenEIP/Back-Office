@@ -38,7 +38,9 @@ const Brands = () => {
       toast.success('Marque supprimé');
       getBrandsList.refetch();
     },
-    onError: () => {},
+    onError: () => {
+      toast.error('Error while deleting news');
+    },
   });
 
   if (isError) return <div>Error ...</div>;

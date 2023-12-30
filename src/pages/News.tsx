@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
 import { deleteNews, fetchNews } from '../api/news';
@@ -25,7 +25,6 @@ import NewsCreation from '../components/Modal/News/addNews';
 import NewsUpdate from '../components/Modal/News/updateNews';
 import { Chip } from '../components/User/Chip';
 import { useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const News = () => {
   //@ts-ignore
@@ -111,7 +110,7 @@ const News = () => {
               ) : (
                 data!.data.map((news: any, idx: number) => {
                   return (
-                    <TableRow>
+                    <TableRow key={news._id}>
                       <TableCell>
                         <Chip user={news.author} />
                       </TableCell>

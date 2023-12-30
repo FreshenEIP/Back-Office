@@ -28,7 +28,6 @@ export const createBrand = async (data): Promise<any> => {
 
 export const updateBrand = async (data): Promise<any> => {
   const { payload, token } = data;
-  console.log(payload);
   const response = await Axios.patch(
     `v2/gestion_article/${payload.brand}/photo`,
     token,

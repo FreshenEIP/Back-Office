@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { RiLockFill } from 'react-icons/ri';
 import { useMutation } from 'react-query';
@@ -14,7 +14,6 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../api/user';
 import logAction from '../redux/actions/logAction';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import React from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,8 +31,8 @@ const Login = () => {
       dispatch(logAction.LogIn(res.token, ''));
       toast.success('Successfully logged-in');
     },
-    onError: () => {
-      toast.error('Error while logging-in');
+    onError: (error: any) => {
+      toast.error(error.response.data.error);
     },
   });
 
