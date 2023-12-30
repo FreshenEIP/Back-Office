@@ -1,5 +1,5 @@
 import { Box, Button, Stack } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery } from 'react-query';
@@ -66,22 +66,26 @@ const Profile = () => {
     },
   });
 
-  if (isError) return <div>Error...</div>;
-  if (isLoading) return <div>Loading...</div>;
-
   const defaultValues = {
-    username: data.username,
+    username: '',
   };
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const methods = useForm<FormValues>({ defaultValues });
 
+  useEffect(() => {
+    if (!isLoading) {
+      methods.setValue('username', data.username);
+    }
+  }, [isLoading, data, methods]);
+
+  if (isError) return <div>Error...</div>;
+  if (isLoading) return <div>Loading...</div>;
+
   const onSubmit: SubmitHandler<FormValues> = (payload) => {
     const token = logReducer.accessToken;
     mutate({ payload, token });
   };
-
-  console.log(data);
 
   return (
     <FormProvider {...methods}>
