@@ -257,6 +257,7 @@ const Reports = () => {
                         </TableCell>
                       </TableRow>
                     );
+                  else return '';
                 })
               )}
             </TableBody>
