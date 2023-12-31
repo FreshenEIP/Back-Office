@@ -28,6 +28,7 @@ export const fetchCustomerById = async (
   userId: string,
 ): Promise<Customers> => {
   const response = await Axios.get(`/v2/users/${userId}`, token, {});
+  console.log(response.data);
   return response.data;
 };
 

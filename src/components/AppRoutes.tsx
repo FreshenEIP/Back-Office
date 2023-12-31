@@ -1,11 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 
+import React from 'react';
 import {
   Brands,
   Comments,
   Customer,
   Customers,
   Dashboard,
+  Friperie,
   Login,
   Logout,
   News,
@@ -14,7 +16,6 @@ import {
   Suggestions,
 } from '../pages';
 import { ProtectedRoutes, ProtectedRoutesAdmin } from './ProtectedRoutes';
-import React from 'react';
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoutesAdmin />}>
           <Route path={'/customers'} element={<Customers />} />
           <Route path={'/customers/:userId'} element={<Customer />} />
+          <Route path={'/friperie'} element={<Friperie />} />
           <Route path={'/reports'} element={<Reports />} />
           <Route path={'/comments'} element={<Comments />} />
           <Route path={'/brands'} element={<Brands />} />

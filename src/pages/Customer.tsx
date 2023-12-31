@@ -37,6 +37,7 @@ const Posts = ({ userId }) => {
   const { data, isLoading, isError } = getPost;
 
   if (isError) return <FetchError />;
+  if (isLoading) return <div>Loading ...</div>;
 
   return (
     <>

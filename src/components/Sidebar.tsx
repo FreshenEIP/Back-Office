@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 
+import React from 'react';
 import {
   BiCategoryAlt,
   BiCommentDetail,
@@ -13,7 +14,6 @@ import logo from '../assets/images/logo.png';
 import sidebarAction from '../redux/actions/sidebarAction';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import SidebardItem from './SidebardItem';
-import React from 'react';
 
 const Sidebar = () => {
   //@ts-ignore
@@ -49,53 +49,63 @@ const Sidebar = () => {
           />
         </Link>
         <Link
-          to={'/comments'}
+          to={'/friperie'}
           onClick={() => dispatch(sidebarAction.setSideBarIndex(2))}
         >
           <SidebardItem
-            title={'Comments'}
-            icon={<BiCommentDetail />}
+            title={'Friperie'}
+            icon={<BiUserPin />}
             active={sidebarReducer.index === 2}
           />
         </Link>
         <Link
-          to={'/reports'}
+          to={'/comments'}
           onClick={() => dispatch(sidebarAction.setSideBarIndex(3))}
         >
           <SidebardItem
-            title={'Reports'}
-            icon={<BiNote />}
+            title={'Comments'}
+            icon={<BiCommentDetail />}
             active={sidebarReducer.index === 3}
           />
         </Link>
         <Link
-          to={'/brands'}
+          to={'/reports'}
           onClick={() => dispatch(sidebarAction.setSideBarIndex(4))}
         >
           <SidebardItem
-            title={'Brands'}
-            icon={<BiStore />}
+            title={'Reports'}
+            icon={<BiNote />}
             active={sidebarReducer.index === 4}
           />
         </Link>
         <Link
-          to={'/news'}
+          to={'/brands'}
           onClick={() => dispatch(sidebarAction.setSideBarIndex(5))}
         >
           <SidebardItem
-            title={'News'}
-            icon={<BiNews />}
+            title={'Brands'}
+            icon={<BiStore />}
             active={sidebarReducer.index === 5}
           />
         </Link>
         <Link
-          to={'/suggestion'}
+          to={'/news'}
           onClick={() => dispatch(sidebarAction.setSideBarIndex(6))}
+        >
+          <SidebardItem
+            title={'News'}
+            icon={<BiNews />}
+            active={sidebarReducer.index === 6}
+          />
+        </Link>
+        <Link
+          to={'/suggestion'}
+          onClick={() => dispatch(sidebarAction.setSideBarIndex(7))}
         >
           <SidebardItem
             title={'Suggestion'}
             icon={<BiMailSend />}
-            active={sidebarReducer.index === 6}
+            active={sidebarReducer.index === 7}
           />
         </Link>
       </div>
