@@ -16,7 +16,9 @@ const TopNav = () => {
             <div className='topnav__right-user__image'>
               <img src={decoded.profile_picture} alt='' />
             </div>
-            <div className='topnav__right-user__name'>{decoded.username}</div>
+            <div className='topnav__right-user__name'>
+              {logReducer.username}
+            </div>
           </Link>
         </div>
         <div className='topnav__right-item'>

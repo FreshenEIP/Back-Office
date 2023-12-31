@@ -6,6 +6,7 @@ const LogIn = (accessToken: string, refreshToken) => {
     return {
       type: 'LOG_IN',
       roles: 'freshen:admin',
+      username: decoded.username,
       accessToken: 'Bearer ' + accessToken,
       refreshToken,
     };
@@ -13,6 +14,7 @@ const LogIn = (accessToken: string, refreshToken) => {
     return {
       type: 'LOG_IN',
       roles: 'freshen:author',
+      username: decoded.username,
       accessToken: 'Bearer ' + accessToken,
       refreshToken,
     };
@@ -20,6 +22,13 @@ const LogIn = (accessToken: string, refreshToken) => {
     return {
       type: 'LOG_OUT',
     };
+};
+
+const ChangeUserName = (username) => {
+  return {
+    type: 'CHANGE_USERNAME',
+    username,
+  };
 };
 
 const LogOut = () => {
@@ -31,6 +40,7 @@ const LogOut = () => {
 const exportDefault = {
   LogIn,
   LogOut,
+  ChangeUserName,
 };
 
 export default exportDefault;

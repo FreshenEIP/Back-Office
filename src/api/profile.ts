@@ -2,7 +2,6 @@ import Axios from '../utils/axios';
 
 export const fetchProfile = async (token): Promise<any> => {
   const response = await Axios.get('v2/profile', token, {});
-  console.log(response);
   return response.data;
 };
 

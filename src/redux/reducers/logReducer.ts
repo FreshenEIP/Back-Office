@@ -1,14 +1,16 @@
 const logReducer = (
   state = {
     roles: 'freshen:user',
+    username: '',
     accessToken: '',
     refreshToken: '',
   },
   action: {
-    type: string,
-    roles?: string,
-    accessToken?: string,
-    refreshToken?: string,
+    type: string;
+    roles?: string;
+    username: string;
+    accessToken?: string;
+    refreshToken?: string;
   },
 ) => {
   switch (action.type) {
@@ -16,6 +18,7 @@ const logReducer = (
       return {
         ...state,
         roles: action.roles,
+        username: action.username,
         accessToken: action.accessToken,
         refreshToken: action.refreshToken,
       };
@@ -23,8 +26,14 @@ const logReducer = (
       return {
         ...state,
         roles: 'freshen:user',
+        username: '',
         accessToken: '',
         refreshToken: '',
+      };
+    case 'CHANGE_USERNAME':
+      return {
+        ...state,
+        username: action.username,
       };
     default:
       return state;

@@ -6,7 +6,8 @@ import { useMutation, useQuery } from 'react-query';
 import { fetchProfile, updateProfile } from '../api/profile';
 import { ConnectedForm } from '../components/ConnectedForm';
 import { InputString } from '../components/Input/InputString';
-import { useAppSelector } from '../redux/hooks';
+import logAction from '../redux/actions/logAction';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 interface FormValues {
   username: string;
@@ -49,6 +50,7 @@ const ProfileUpdate = ({ onSubmit, data }) => {
 };
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
   //@ts-ignore
   const logReducer = useAppSelector((state) => state.logReducer);
   const getProfile = useQuery(['profile'], () =>
@@ -58,8 +60,9 @@ const Profile = () => {
   const { data, isLoading, isError } = getProfile;
 
   const { mutate } = useMutation(updateProfile, {
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Username successfully change');
+      getProfile.refetch();
     },
     onError: () => {
       toast.error('Error while updating username');
@@ -76,8 +79,9 @@ const Profile = () => {
   useEffect(() => {
     if (!isLoading) {
       methods.setValue('username', data.username);
+      dispatch(logAction.ChangeUserName(data.username));
     }
-  }, [isLoading, data, methods]);
+  }, [isLoading, data, methods, dispatch]);
 
   if (isError) return <div>Error...</div>;
   if (isLoading) return <div>Loading...</div>;

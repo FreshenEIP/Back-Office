@@ -68,6 +68,7 @@ const Suggestions = () => {
                 <TableCell>Article</TableCell>
                 <TableCell>Price</TableCell>
                 <TableCell>Comment</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -89,6 +90,7 @@ const Suggestions = () => {
                     <TableCell>
                       <Typography>{suggestion.comment}</Typography>
                     </TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                 );
               })}
