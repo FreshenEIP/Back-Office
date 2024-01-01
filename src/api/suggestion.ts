@@ -11,3 +11,12 @@ export const fetchSuggestions = async (
   });
   return response.data;
 };
+
+export const deleteSuggestion = async (data: {
+  token: string;
+  id: string;
+}): Promise<any> => {
+  const { token, id } = data;
+  const response = await Axios.delete(`v2/suggestion/${id}`, token, {});
+  return response.data;
+};

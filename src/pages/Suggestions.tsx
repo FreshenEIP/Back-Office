@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import {
+  Button,
   Paper,
   Stack,
   Table,
@@ -12,6 +13,10 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useMutation } from 'react-query';
+import { deleteSuggestion } from '../api/suggestion';
+import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { useFetchSuggestions } from '../query/Suggestions';
 import { useAppSelector } from '../redux/hooks';
@@ -28,6 +33,14 @@ const Suggestions = () => {
   );
 
   const { data, isLoading, isRefetching, isError } = getSuggestionList;
+
+  const { mutate } = useMutation(deleteSuggestion, {
+    onSuccess: () => {
+      toast.success('Suggestion supprimé');
+      getSuggestionList.refetch();
+    },
+    onError: () => {},
+  });
 
   if (isError) return <div data-testid='suggestions-error'>Error ...</div>;
 
@@ -46,6 +59,11 @@ const Suggestions = () => {
     newPage: number,
   ) => {
     setPage(newPage);
+  };
+
+  const handleConfirmation = (suggestionId: string) => {
+    const token = logReducer.accessToken;
+    mutate({ token, id: suggestionId });
   };
 
   return (
@@ -90,7 +108,36 @@ const Suggestions = () => {
                     <TableCell>
                       <Typography>{suggestion.comment}</Typography>
                     </TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>
+                      <CustomDialog
+                        header={`Supprimer`}
+                        trigger={
+                          <Button variant={'outlined'} color='error'>
+                            Delete
+                          </Button>
+                        }
+                      >
+                        <div>
+                          <Stack
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            spacing={2}
+                          >
+                            <Typography>
+                              Êtes-vous sure de vouloir supprimer cette
+                              Suggestions ?
+                            </Typography>
+                            <Button
+                              variant={'outlined'}
+                              color='error'
+                              onClick={() => handleConfirmation(suggestion._id)}
+                            >
+                              Confirmer
+                            </Button>
+                          </Stack>
+                        </div>
+                      </CustomDialog>
+                    </TableCell>
                   </TableRow>
                 );
               })}
