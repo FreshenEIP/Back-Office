@@ -55,7 +55,7 @@ const Friperie = () => {
                     </TableCell>
                     <TableCell>
                       <Link
-                        to={`https://www.google.fr/maps/@${friperie.position.lat},${friperie.position.lng},14z?entry=ttu`}
+                        to={`https://www.google.com/maps/search/?api=1&query=${friperie.position.lat},${friperie.position.lng}`}
                         target='_blank'
                       >
                         Voir la position
