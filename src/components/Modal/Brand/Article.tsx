@@ -50,14 +50,6 @@ export const Article: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
                   label={'Water (L)'}
                 />
               </Box>
-              <Box width={'100%'}>
-                <InputNumber
-                  fullWidth
-                  required
-                  property={`coton`}
-                  label={'Cotton (Kg)'}
-                />
-              </Box>
             </Stack>
           </Stack>
           <Button

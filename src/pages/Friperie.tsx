@@ -22,12 +22,10 @@ const Friperie = () => {
 
   const { data, isLoading, isRefetching, isError } = getUserList;
 
-  if (isError) return <div data-testid='friperie-error'>Error ...</div>;
+  if (isError) return <div data-testid='friperie-error'>Error...</div>;
 
   if (isLoading || isRefetching)
     return <div data-testid='friperie-loading'>Loading...</div>;
-
-  console.log(data);
 
   return (
     <>

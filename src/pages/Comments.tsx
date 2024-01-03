@@ -15,11 +15,12 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
-import { fetchComments, removeComment } from '../api/comments';
+import { useMutation } from 'react-query';
+import { removeComment } from '../api/comments';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Comment } from '../interface/comment/comment';
+import { useFetchComment } from '../query/Comments';
 import { useAppSelector } from '../redux/hooks';
 
 const Comments = () => {
@@ -27,8 +28,10 @@ const Comments = () => {
   const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const getCommentList = useQuery(['comments', page, pageSize], () =>
-    fetchComments(logReducer.accessToken, page, pageSize),
+  const getCommentList = useFetchComment(
+    logReducer.accessToken,
+    page,
+    pageSize,
   );
   const { data, isLoading, isError, isRefetching } = getCommentList;
 
@@ -41,7 +44,10 @@ const Comments = () => {
     },
   });
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='comments-error'>Error...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='comments-loading'>Loading...</div>;
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -93,68 +99,60 @@ const Comments = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data!.data.map((comment: Comment, idx: number) => {
-                  return (
-                    <TableRow>
-                      <TableCell align='center'>
-                        {comment.user === undefined ? (
-                          <></>
-                        ) : (
-                          <UserChip user={comment.user} clickable={false} />
-                        )}
-                      </TableCell>
-                      <TableCell>{comment.message}</TableCell>
-                      <TableCell>{comment.like.length}</TableCell>
-                      <TableCell>{comment.reply.length}</TableCell>
-                      <TableCell>
-                        <div>
-                          {dayjs(comment.createdAt).format(
-                            'DD-MM-YYYY hh:mm:ss',
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <>
-                          <CustomDialog
-                            header={'Supprimer commentaire'}
-                            trigger={
-                              <Button variant={'outlined'} color='error'>
-                                Delete
-                              </Button>
-                            }
-                          >
-                            <div>
-                              <Stack
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                spacing={2}
+              {data!.data.map((comment: Comment, idx: number) => {
+                return (
+                  <TableRow data-testid={'comments-rows'} key={comment._id}>
+                    <TableCell align='center'>
+                      {comment.user === undefined ? (
+                        <></>
+                      ) : (
+                        <UserChip user={comment.user} clickable={false} />
+                      )}
+                    </TableCell>
+                    <TableCell>{comment.message}</TableCell>
+                    <TableCell>{comment.like.length}</TableCell>
+                    <TableCell>{comment.reply.length}</TableCell>
+                    <TableCell>
+                      <div>
+                        {dayjs(comment.createdAt).format('DD-MM-YYYY hh:mm:ss')}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <>
+                        <CustomDialog
+                          header={'Supprimer commentaire'}
+                          trigger={
+                            <Button variant={'outlined'} color='error'>
+                              Delete
+                            </Button>
+                          }
+                        >
+                          <div>
+                            <Stack
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              spacing={2}
+                            >
+                              <Typography>
+                                Êtes-vous sure de vouloir supprimer ce
+                                commentaire ?
+                              </Typography>
+                              <Typography>{comment.message}</Typography>
+                              <Button
+                                variant={'outlined'}
+                                color='error'
+                                onClick={() => handleConfirmation(comment._id)}
                               >
-                                <Typography>
-                                  Êtes-vous sure de vouloir supprimer ce
-                                  commentaire ?
-                                </Typography>
-                                <Typography>{comment.message}</Typography>
-                                <Button
-                                  variant={'outlined'}
-                                  color='error'
-                                  onClick={() =>
-                                    handleConfirmation(comment._id)
-                                  }
-                                >
-                                  Confirmer
-                                </Button>
-                              </Stack>
-                            </div>
-                          </CustomDialog>
-                        </>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                                Confirmer
+                              </Button>
+                            </Stack>
+                          </div>
+                        </CustomDialog>
+                      </>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

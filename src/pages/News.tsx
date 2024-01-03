@@ -16,14 +16,15 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
-import { deleteNews, fetchNews } from '../api/news';
+import { useMutation } from 'react-query';
+import { deleteNews } from '../api/news';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { TextView } from '../components/Modal/News/TextView';
 import NewsCreation from '../components/Modal/News/addNews';
 import NewsUpdate from '../components/Modal/News/updateNews';
 import { Chip } from '../components/User/Chip';
+import { useFetchNews } from '../query/News';
 import { useAppSelector } from '../redux/hooks';
 
 const News = () => {
@@ -31,9 +32,7 @@ const News = () => {
   const logReducer = useAppSelector((state) => state.logReducer);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const getNewsList = useQuery(['news', page, pageSize], () =>
-    fetchNews(logReducer.accessToken, page, pageSize),
-  );
+  const getNewsList = useFetchNews(logReducer.accessToken, page, pageSize);
   const { data, isLoading, isError, isRefetching } = getNewsList;
 
   const { mutate } = useMutation(deleteNews, {
@@ -44,7 +43,10 @@ const News = () => {
     onError: () => {},
   });
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='news-error'>Error...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='news-loading'>Loading...</div>;
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -105,105 +107,94 @@ const News = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data!.data.map((news: any, idx: number) => {
-                  return (
-                    <TableRow key={news._id}>
-                      <TableCell>
-                        <Chip user={news.author} />
-                      </TableCell>
-                      <TableCell align='center'>
-                        <Image src={news.image} alt={'item image'} />
-                      </TableCell>
-                      <TableCell align='center'>
-                        <Typography>{news.title}</Typography>
-                      </TableCell>
-                      <TableCell align='center'>
+              {data!.data.map((news: any, idx: number) => {
+                return (
+                  <TableRow data-testid={'news-rows'} key={news._id}>
+                    <TableCell>
+                      <Chip user={news.author} />
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Image src={news.image} alt={'item image'} />
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Typography>{news.title}</Typography>
+                    </TableCell>
+                    <TableCell align='center'>
+                      <CustomDialog
+                        header={'Text'}
+                        trigger={<Button>View more</Button>}
+                      >
+                        <TextView text={news.text} />
+                      </CustomDialog>
+                    </TableCell>
+                    <TableCell align='center'>
+                      {dayjs(news.creationDate).format('DD-MM-YYYY hh:mm:ss')}
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Stack
+                        direction={'row'}
+                        spacing={2}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                      >
                         <CustomDialog
-                          header={'Text'}
-                          trigger={<Button>View more</Button>}
+                          header={'News update'}
+                          trigger={<Button variant={'outlined'}>Update</Button>}
                         >
-                          <TextView text={news.text} />
+                          <NewsUpdate
+                            date={news.creationDate}
+                            id={news._id}
+                            title={news.title}
+                            text={news.text}
+                            image={news.image}
+                          />
                         </CustomDialog>
-                      </TableCell>
-                      <TableCell align='center'>
-                        {dayjs(news.creationDate).format('DD-MM-YYYY hh:mm:ss')}
-                      </TableCell>
-                      <TableCell align='center'>
-                        <Stack
-                          direction={'row'}
-                          spacing={2}
-                          alignItems={'center'}
-                          justifyContent={'center'}
+                        <CustomDialog
+                          header={`Supprimer ${news.title}`}
+                          trigger={
+                            <Button variant={'outlined'} color='error'>
+                              Delete
+                            </Button>
+                          }
                         >
-                          <CustomDialog
-                            header={'News update'}
-                            trigger={
-                              <Button variant={'outlined'}>Update</Button>
-                            }
-                          >
-                            <NewsUpdate
-                              date={news.creationDate}
-                              id={news._id}
-                              title={news.title}
-                              text={news.text}
-                              image={news.image}
-                            />
-                          </CustomDialog>
-                          <CustomDialog
-                            header={`Supprimer ${news.title}`}
-                            trigger={
-                              <Button variant={'outlined'} color='error'>
-                                Delete
-                              </Button>
-                            }
-                          >
-                            <div>
-                              <Stack
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                                spacing={2}
+                          <div>
+                            <Stack
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              spacing={2}
+                            >
+                              <Typography>
+                                Êtes-vous sure de vouloir supprimer cette news ?
+                              </Typography>
+                              <Button
+                                variant={'outlined'}
+                                color='error'
+                                onClick={() => handleConfirmation(news._id)}
                               >
-                                <Typography>
-                                  Êtes-vous sure de vouloir supprimer cette news
-                                  ?
-                                </Typography>
-                                <Button
-                                  variant={'outlined'}
-                                  color='error'
-                                  onClick={() => handleConfirmation(news._id)}
-                                >
-                                  Confirmer
-                                </Button>
-                              </Stack>
-                            </div>
-                          </CustomDialog>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                                Confirmer
+                              </Button>
+                            </Stack>
+                          </div>
+                        </CustomDialog>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      {isLoading ? (
-        <></>
-      ) : (
-        <TablePagination
-          component='div'
-          showFirstButton
-          showLastButton
-          count={data!.count}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      )}
+      <TablePagination
+        component='div'
+        showFirstButton
+        showLastButton
+        count={data!.count}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </>
   );
 };

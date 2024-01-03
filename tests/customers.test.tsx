@@ -4,7 +4,7 @@
 
 // @ts-nocheck
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import Customers from '../src/pages/Customers';
 import { useFetchCustomers } from '../src/query/Customers';
@@ -26,7 +26,7 @@ describe('Users component', () => {
 
     it('Displays the refetching view', () => {
       mockedUseUsersQuery.mockImplementation(() => ({
-        isLoading: true,
+        isRefetching: true,
       }));
       render(<Customers />, { wrapper });
       expect(screen.getByTestId('users-loading')).toBeInTheDocument();
@@ -70,9 +70,6 @@ describe('Users component', () => {
           },
         }));
         render(<Customers />, { wrapper });
-        expect(
-          screen.getByTestId(`user-645134905eec8a5e57bbb93f`),
-        ).toBeInTheDocument();
         expect(screen.getByText('Antoine')).toBeVisible();
         const banButton = screen.getByRole('button', { name: /ban/i });
         expect(banButton).toBeVisible();
@@ -105,9 +102,6 @@ describe('Users component', () => {
           },
         }));
         render(<Customers />, { wrapper });
-        expect(
-          screen.getByTestId(`user-645134905eec8a5e57bbb93f`),
-        ).toBeInTheDocument();
         expect(screen.getByText('Antoine')).toBeVisible();
         const banButton = screen.getByRole('button', { name: /unban/i });
         expect(banButton).toBeVisible();
@@ -157,12 +151,6 @@ describe('Users component', () => {
         }));
         render(<Customers />, { wrapper });
         expect(
-          screen.getByTestId(`user-645134905eec8a5e57bbb93f`),
-        ).toBeInTheDocument();
-        expect(
-          screen.getByTestId(`user-6572f3e81ccf8acba77596ac`),
-        ).toBeInTheDocument();
-        expect(
           screen.getAllByTestId('customers-rows').length,
         ).toBeGreaterThanOrEqual(2);
       });
@@ -195,12 +183,86 @@ describe('Users component', () => {
           },
         }));
         render(<Customers />, { wrapper });
-        expect(
-          screen.getByTestId(`user-645134905eec8a5e57bbb93f`),
-        ).toBeInTheDocument();
         expect(screen.getByText('Antoine')).toBeVisible();
         expect(screen.getByText('true')).toBeVisible();
       });
+    });
+  });
+
+  describe('User button click', () => {
+    it('Prompt user ban', () => {
+      mockedUseUsersQuery.mockImplementation(() => ({
+        isLoading: false,
+        data: {
+          count: 1,
+          data: [
+            {
+              _id: '645134905eec8a5e57bbb93f',
+              banned: false,
+              creationDate: '2023-05-02T16:04:32.680Z',
+              description: 'null',
+              email: 'antoine@vergez.me',
+              follow: [],
+              followers: [],
+              friperie: false,
+              privacy: 'public',
+              profile_picture:
+                'https://firebasestorage.googleapis.com/v0/b/freshen-bc365.appspot.com/o/users%2F645134905eec8a5e57bbb93f%2Fprofile_picture.png?alt=media&token=cc2a0f45-7a1e-41cc-bde1-33f69de20944',
+              username: 'Antoine',
+              locale: null,
+              roles: ['freshen:user'],
+            },
+          ],
+        },
+      }));
+      render(<Customers />, { wrapper });
+      const banButton = screen.getByRole('button', { name: /ban/i });
+      fireEvent.click(banButton);
+      expect(
+        screen.getByText(
+          'Êtes-vous sure de vouloir Ban cet utilisateur (Antoine) ?',
+        ),
+      ).toBeVisible();
+      const confirmButton = screen.getByRole('button', { name: /confirmer/i });
+      expect(confirmButton).toBeVisible();
+      expect(confirmButton).toHaveClass('MuiButton-outlinedError');
+    });
+    it('Prompt user unban', () => {
+      mockedUseUsersQuery.mockImplementation(() => ({
+        isLoading: false,
+        data: {
+          count: 1,
+          data: [
+            {
+              _id: '645134905eec8a5e57bbb93f',
+              banned: true,
+              creationDate: '2023-05-02T16:04:32.680Z',
+              description: 'null',
+              email: 'antoine@vergez.me',
+              follow: [],
+              followers: [],
+              friperie: false,
+              privacy: 'public',
+              profile_picture:
+                'https://firebasestorage.googleapis.com/v0/b/freshen-bc365.appspot.com/o/users%2F645134905eec8a5e57bbb93f%2Fprofile_picture.png?alt=media&token=cc2a0f45-7a1e-41cc-bde1-33f69de20944',
+              username: 'Antoine',
+              locale: null,
+              roles: ['freshen:user'],
+            },
+          ],
+        },
+      }));
+      render(<Customers />, { wrapper });
+      const banButton = screen.getByRole('button', { name: /unban/i });
+      fireEvent.click(banButton);
+      expect(
+        screen.getByText(
+          'Êtes-vous sure de vouloir Unban cet utilisateur (Antoine) ?',
+        ),
+      ).toBeVisible();
+      const confirmButton = screen.getByRole('button', { name: /confirmer/i });
+      expect(confirmButton).toBeVisible();
+      expect(confirmButton).toHaveClass('MuiButton-outlinedError');
     });
   });
 });

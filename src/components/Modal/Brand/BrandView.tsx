@@ -1,7 +1,7 @@
 import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { FaCottonBureau, FaDollarSign, FaWater } from 'react-icons/fa';
+import { FaDollarSign, FaWater } from 'react-icons/fa';
 import {
   RiAddCircleLine,
   RiArrowLeftSLine,
@@ -9,15 +9,16 @@ import {
 } from 'react-icons/ri';
 import { useMutation, useQuery } from 'react-query';
 import { deleteArticle, fetchBrand } from '../../../api/brands';
-import config from '../../../config';
+import { useAppSelector } from '../../../redux/hooks';
 import ArticleCreation from './AddArticle';
-import React from 'react';
 
 const BrandView = ({ brand }) => {
   const [view, setView] = useState('brand');
+  //@ts-ignore
+  const logReducer = useAppSelector((state) => state.logReducer);
 
   const getBrand = useQuery([`brand ${brand}`], () =>
-    fetchBrand(config.TOKEN, brand),
+    fetchBrand(logReducer.accessToken, brand),
   );
   const { data, isLoading, isError, isRefetching } = getBrand;
 
@@ -74,18 +75,12 @@ const BrandView = ({ brand }) => {
                       </Box>
                       <Box>{data.articles[value].water} L</Box>
                     </Stack>
-                    <Stack direction={'row'} spacing={2}>
-                      <Box>
-                        <FaCottonBureau />
-                      </Box>
-                      <Box>{data.articles[value].coton} Kg</Box>
-                    </Stack>
                   </Stack>
                   <IconButton
                     type='button'
                     onClick={() =>
                       mutate({
-                        token: config.TOKEN,
+                        token: logReducer.accessToken,
                         brand,
                         article: value,
                       })

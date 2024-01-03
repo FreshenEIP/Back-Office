@@ -10,13 +10,13 @@ import Suggestions from '../src/pages/Suggestions';
 import { useFetchSuggestions } from '../src/query/Suggestions';
 import wrapper from './wrapper';
 
-const mockedUseUsersQuery = useFetchSuggestions;
+const mockedUseSuggestionsQuery = useFetchSuggestions;
 jest.mock('../src/query/Suggestions.tsx');
 
 describe('Suggestions component', () => {
   describe('Suggestions component state', () => {
     it('Displays the loading view', () => {
-      mockedUseUsersQuery.mockImplementation(() => ({
+      mockedUseSuggestionsQuery.mockImplementation(() => ({
         isLoading: true,
       }));
       render(<Suggestions />, { wrapper });
@@ -25,7 +25,7 @@ describe('Suggestions component', () => {
     });
 
     it('Displays the refetching view', () => {
-      mockedUseUsersQuery.mockImplementation(() => ({
+      mockedUseSuggestionsQuery.mockImplementation(() => ({
         isLoading: true,
       }));
       render(<Suggestions />, { wrapper });
@@ -34,7 +34,7 @@ describe('Suggestions component', () => {
     });
 
     it('Displays the error view', () => {
-      mockedUseUsersQuery.mockImplementation(() => ({
+      mockedUseSuggestionsQuery.mockImplementation(() => ({
         isError: true,
       }));
       render(<Suggestions />, { wrapper });
@@ -45,7 +45,7 @@ describe('Suggestions component', () => {
 
   describe('Suggestions component data', () => {
     it('displays one suggestion', () => {
-      mockedUseUsersQuery.mockImplementation(() => ({
+      mockedUseSuggestionsQuery.mockImplementation(() => ({
         isLoading: false,
         data: {
           count: 1,
@@ -85,7 +85,7 @@ describe('Suggestions component', () => {
     });
 
     it('displays multiple suggestions', () => {
-      mockedUseUsersQuery.mockImplementation(() => ({
+      mockedUseSuggestionsQuery.mockImplementation(() => ({
         isLoading: false,
         data: {
           count: 2,

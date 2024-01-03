@@ -13,14 +13,15 @@ import {
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { toast } from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
-import { deleteBrand, fetchBrands } from '../api/brands';
+import { useMutation } from 'react-query';
+import { deleteBrand } from '../api/brands';
 import { Chip as BrandChip } from '../components/Brand/Chip';
 import BrandCreation from '../components/Modal/Brand/AddBrand';
 import BrandView from '../components/Modal/Brand/BrandView';
 import BrandUpdate from '../components/Modal/Brand/UpdateBrand';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Brand } from '../interface/brand/brand';
+import { useFetchBrands } from '../query/Brands';
 import { useAppSelector } from '../redux/hooks';
 
 const Brands = () => {
@@ -28,9 +29,7 @@ const Brands = () => {
   const logReducer = useAppSelector((state) => state.logReducer);
   // const [page, setPage] = useState(0);
   // const [pageSize, setPageSize] = useState(25);
-  const getBrandsList = useQuery(['brands', 0, 25], () =>
-    fetchBrands(logReducer.accessToken, 0, 25),
-  );
+  const getBrandsList = useFetchBrands(logReducer.accessToken);
   const { data, isLoading, isError, isRefetching } = getBrandsList;
 
   const { mutate } = useMutation(deleteBrand, {
@@ -43,21 +42,10 @@ const Brands = () => {
     },
   });
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='brands-error'>Error...</div>;
 
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  // ) => {
-  //   setPageSize(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // const handleChangePage = (
-  //   event: React.MouseEvent<HTMLButtonElement> | null,
-  //   newPage: number,
-  // ) => {
-  //   setPage(newPage);
-  // };
+  if (isLoading || isRefetching)
+    return <div data-testid='brands-loading'>Loading...</div>;
 
   return (
     <>
@@ -96,91 +84,68 @@ const Brands = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data.map((brand: Brand, idx: number) => {
-                  return (
-                    <TableRow>
-                      <TableCell align='center'>
-                        <BrandChip
-                          clickable={false}
-                          brand={{
-                            _id: brand._id,
-                            brand: brand.brand,
-                            photo: brand.photo,
-                            articles: brand.articles,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Stack
-                          spacing={2}
-                          alignItems={'center'}
-                          justifyContent={'center'}
+              {data.map((brand: Brand, idx: number) => {
+                return (
+                  <TableRow data-testid='brands-rows' key={brand._id}>
+                    <TableCell align='center'>
+                      <BrandChip
+                        clickable={false}
+                        brand={{
+                          _id: brand._id,
+                          brand: brand.brand,
+                          photo: brand.photo,
+                          articles: brand.articles,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Stack
+                        spacing={2}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                      >
+                        {Object.keys(brand.articles).length}
+                        <CustomDialog
+                          header={'Articles'}
+                          trigger={<Button>View details</Button>}
                         >
-                          {Object.keys(brand.articles).length}
-                          <CustomDialog
-                            header={'Articles'}
-                            trigger={<Button>View details</Button>}
-                          >
-                            <BrandView brand={brand.brand} />
-                          </CustomDialog>
-                        </Stack>
-                      </TableCell>
-                      <TableCell align='center'>
-                        <Stack
-                          direction={'row'}
-                          spacing={2}
-                          alignItems={'center'}
-                          justifyContent={'center'}
+                          <BrandView brand={brand.brand} />
+                        </CustomDialog>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Stack
+                        direction={'row'}
+                        spacing={2}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                      >
+                        <Button
+                          variant={'outlined'}
+                          onClick={() =>
+                            mutate({
+                              token: logReducer.accessToken,
+                              brand: brand.brand,
+                            })
+                          }
                         >
-                          <Button
-                            variant={'outlined'}
-                            onClick={() =>
-                              mutate({
-                                token: logReducer.accessToken,
-                                brand: brand.brand,
-                              })
-                            }
-                          >
-                            Remove
-                          </Button>
-                          <CustomDialog
-                            header={'Brand update'}
-                            trigger={
-                              <Button variant={'outlined'}>Update</Button>
-                            }
-                          >
-                            <BrandUpdate
-                              brand={brand.brand}
-                              url={brand.photo}
-                            />
-                          </CustomDialog>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
+                          Remove
+                        </Button>
+                        <CustomDialog
+                          header={'Brand update'}
+                          trigger={<Button variant={'outlined'}>Update</Button>}
+                        >
+                          <BrandUpdate brand={brand.brand} url={brand.photo} />
+                        </CustomDialog>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
       </Paper>
-      {/* {isLoading ? (
-        <></>
-      ) : (
-        <TablePagination
-          component='div'
-          showFirstButton
-          showLastButton
-          count={data!.count}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      )} */}
     </>
   );
 };

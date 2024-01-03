@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { fetchCustomers } from '../api/customers';
+import { fetchCustomerById, fetchCustomers } from '../api/customers';
 
 export const useFetchCustomers = (
   token,
@@ -12,6 +12,13 @@ export const useFetchCustomers = (
   const result = useQuery(
     ['customers', page, pageSize, type, username, roles],
     () => fetchCustomers(token, page, pageSize, type, username, roles),
+  );
+  return result;
+};
+
+export const useFetchCustomerId = (token, userId) => {
+  const result = useQuery(['customer', userId], () =>
+    fetchCustomerById(token, userId),
   );
   return result;
 };

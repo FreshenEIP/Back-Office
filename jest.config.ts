@@ -5,5 +5,12 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
+  coveragePathIgnorePatterns: [
+    './src/api',
+    './node_modules',
+    './src/utils',
+    './src/redux',
+    './src/query',
+  ],
 };
 export default config;

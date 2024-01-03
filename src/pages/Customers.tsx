@@ -80,9 +80,6 @@ const Customers = () => {
 
   if (isError) return <div data-testid='users-error'>Error ...</div>;
 
-  if (isLoading || isRefetching)
-    return <div data-testid='users-loading'>Loading...</div>;
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -150,105 +147,113 @@ const Customers = () => {
           </TextField>
         </Stack>
       </Toolbar>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
-        <TableContainer sx={{ borderRadius: '6px' }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>User</TableCell>
-                <TableCell>Roles</TableCell>
-                <TableCell>Friperie</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Follower</TableCell>
-                <TableCell>Followers</TableCell>
-                <TableCell>Creation Date</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data!.data.map((user: User, idx: number) => {
-                return (
-                  <TableRow data-testid={'customers-rows'} key={user._id}>
-                    <TableCell align='center'>
-                      <UserChip
-                        data-testid={`user-${user._id}`}
-                        user={user}
-                        clickable={true}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <RoleChip
-                        userList={getUserList}
-                        userId={user._id}
-                        roles={user.roles}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Stack>
-                        <Typography>{user.friperie.toString()}</Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.follow.length}</TableCell>
-                    <TableCell>{user.followers.length}</TableCell>
-                    <TableCell>
-                      {dayjs(user.creationDate).format('DD-MM-YYYY hh:mm:ss')}
-                    </TableCell>
-                    <TableCell>
-                      <>
-                        <CustomDialog
-                          header={`Ban ${user.username}`}
-                          trigger={
-                            <Button
-                              variant={'outlined'}
-                              color={user.banned ? 'success' : 'error'}
-                            >
-                              {user.banned ? 'Unban' : 'Ban'}
-                            </Button>
-                          }
-                        >
-                          <div>
-                            <Stack
-                              justifyContent={'center'}
-                              alignItems={'center'}
-                              spacing={2}
-                            >
-                              <Typography>
-                                Êtes-vous sure de vouloir{' '}
-                                {user.banned ? <>Unban</> : <>Ban</>} cet
-                                utilisateur ({user.username}) ?
-                              </Typography>
-                              <Button
-                                variant={'outlined'}
-                                color='error'
-                                onClick={() =>
-                                  handleConfirmation(user._id, user.banned)
-                                }
-                              >
-                                Confirmer
-                              </Button>
-                            </Stack>
-                          </div>
-                        </CustomDialog>
-                      </>
-                    </TableCell>
+      {isLoading || isRefetching ? (
+        <div data-testid='users-loading'>Loading...</div>
+      ) : (
+        <>
+          <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
+            <TableContainer sx={{ borderRadius: '6px' }}>
+              <Table stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>User</TableCell>
+                    <TableCell>Roles</TableCell>
+                    <TableCell>Friperie</TableCell>
+                    <TableCell>Email</TableCell>
+                    <TableCell>Follower</TableCell>
+                    <TableCell>Followers</TableCell>
+                    <TableCell>Creation Date</TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <TablePagination
-        component='div'
-        showFirstButton
-        showLastButton
-        count={data!.count}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+                </TableHead>
+                <TableBody>
+                  {data!.data.map((user: User, idx: number) => {
+                    return (
+                      <TableRow data-testid={'customers-rows'} key={user._id}>
+                        <TableCell align='center'>
+                          <UserChip
+                            data-testid={`user-${user._id}`}
+                            user={user}
+                            clickable={true}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <RoleChip
+                            userList={getUserList}
+                            userId={user._id}
+                            roles={user.roles}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Stack>
+                            <Typography>{user.friperie.toString()}</Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.follow.length}</TableCell>
+                        <TableCell>{user.followers.length}</TableCell>
+                        <TableCell>
+                          {dayjs(user.creationDate).format(
+                            'DD-MM-YYYY hh:mm:ss',
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <>
+                            <CustomDialog
+                              header={`Ban ${user.username}`}
+                              trigger={
+                                <Button
+                                  variant={'outlined'}
+                                  color={user.banned ? 'success' : 'error'}
+                                >
+                                  {user.banned ? 'Unban' : 'Ban'}
+                                </Button>
+                              }
+                            >
+                              <div>
+                                <Stack
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  spacing={2}
+                                >
+                                  <Typography>
+                                    Êtes-vous sure de vouloir{' '}
+                                    {user.banned ? <>Unban</> : <>Ban</>} cet
+                                    utilisateur ({user.username}) ?
+                                  </Typography>
+                                  <Button
+                                    variant={'outlined'}
+                                    color='error'
+                                    onClick={() =>
+                                      handleConfirmation(user._id, user.banned)
+                                    }
+                                  >
+                                    Confirmer
+                                  </Button>
+                                </Stack>
+                              </div>
+                            </CustomDialog>
+                          </>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+          <TablePagination
+            component='div'
+            showFirstButton
+            showLastButton
+            count={data!.count}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={pageSize}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </>
   );
 };
