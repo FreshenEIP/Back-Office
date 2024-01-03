@@ -7,10 +7,10 @@ const logReducer = (
   },
   action: {
     type: string;
-    roles?: string;
+    roles: string;
     username: string;
-    accessToken?: string;
-    refreshToken?: string;
+    accessToken: string;
+    refreshToken: string;
   },
 ) => {
   switch (action.type) {

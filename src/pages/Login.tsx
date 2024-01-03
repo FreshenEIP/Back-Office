@@ -29,7 +29,6 @@ const Login = () => {
     onSuccess: (res) => {
       navigate('/dashboard');
       dispatch(logAction.LogIn(res.token, ''));
-      toast.success('Successfully logged-in');
     },
     onError: (error: any) => {
       toast.error(error.response.data.error);

@@ -1,8 +1,10 @@
 import { jwtDecode } from 'jwt-decode';
+import toast from 'react-hot-toast';
 
 const LogIn = (accessToken: string, refreshToken) => {
   const decoded: any = jwtDecode(accessToken);
-  if (decoded.roles.includes('freshen:admin'))
+  if (decoded.roles.includes('freshen:admin')) {
+    toast.success('Successfully logged-in');
     return {
       type: 'LOG_IN',
       roles: 'freshen:admin',
@@ -10,7 +12,8 @@ const LogIn = (accessToken: string, refreshToken) => {
       accessToken: 'Bearer ' + accessToken,
       refreshToken,
     };
-  else if (decoded.roles.includes('freshen:author'))
+  } else if (decoded.roles.includes('freshen:author')) {
+    toast.success('Successfully logged-in');
     return {
       type: 'LOG_IN',
       roles: 'freshen:author',
@@ -18,10 +21,12 @@ const LogIn = (accessToken: string, refreshToken) => {
       accessToken: 'Bearer ' + accessToken,
       refreshToken,
     };
-  else
+  } else {
+    toast.error("You can't log as user");
     return {
       type: 'LOG_OUT',
     };
+  }
 };
 
 const ChangeUserName = (username) => {
