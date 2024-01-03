@@ -64,9 +64,9 @@ describe('Brands component', () => {
         name: /view details/i,
       });
       expect(detailsButton).toBeVisible();
-      const removeButton = screen.getByRole('button', { name: /remove/i });
+      const removeButton = screen.getByRole('button', { name: /delete/i });
       expect(removeButton).toBeVisible();
-      expect(removeButton).toHaveClass('MuiButton-outlinedPrimary');
+      expect(removeButton).toHaveClass('MuiButton-outlinedError');
       const updateButton = screen.getByRole('button', { name: /update/i });
       expect(updateButton).toBeVisible();
       expect(updateButton).toHaveClass('MuiButton-outlinedPrimary');

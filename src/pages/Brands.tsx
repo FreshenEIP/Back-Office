@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
@@ -41,6 +42,11 @@ const Brands = () => {
       toast.error('Error while deleting news');
     },
   });
+
+  const handleConfirmation = (brand) => {
+    const token = logReducer.accessToken;
+    mutate({ token, brand });
+  };
 
   if (isError) return <div data-testid='brands-error'>Error...</div>;
 
@@ -120,22 +126,39 @@ const Brands = () => {
                         alignItems={'center'}
                         justifyContent={'center'}
                       >
-                        <Button
-                          variant={'outlined'}
-                          onClick={() =>
-                            mutate({
-                              token: logReducer.accessToken,
-                              brand: brand.brand,
-                            })
-                          }
-                        >
-                          Remove
-                        </Button>
                         <CustomDialog
                           header={'Brand update'}
                           trigger={<Button variant={'outlined'}>Update</Button>}
                         >
                           <BrandUpdate brand={brand.brand} url={brand.photo} />
+                        </CustomDialog>
+                        <CustomDialog
+                          header={'Supprimer marque'}
+                          trigger={
+                            <Button variant={'outlined'} color='error'>
+                              Delete
+                            </Button>
+                          }
+                        >
+                          <div>
+                            <Stack
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              spacing={2}
+                            >
+                              <Typography>
+                                Êtes-vous sure de vouloir supprimer cet marque ?
+                              </Typography>
+                              <Typography>{brand.brand}</Typography>
+                              <Button
+                                variant={'outlined'}
+                                color='error'
+                                onClick={() => handleConfirmation(brand.brand)}
+                              >
+                                Confirmer
+                              </Button>
+                            </Stack>
+                          </div>
                         </CustomDialog>
                       </Stack>
                     </TableCell>
