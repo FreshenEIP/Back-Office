@@ -52,7 +52,7 @@ const Posts = ({ userId }) => {
       <TableBody>
         {data!.data.map((post: any, idx: number) => {
           return (
-            <TableRow>
+            <TableRow key={`posts-${post._id}`}>
               <TableCell>{post._id}</TableCell>
               <TableCell>
                 {dayjs(post.created_at).format('DD-MM-YYYY hh:mm:ss')}

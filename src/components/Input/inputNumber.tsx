@@ -5,10 +5,9 @@ import {
   InputLabel,
   OutlinedInput,
 } from '@mui/material';
-import { ConnectedForm } from '../ConnectedForm';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Controller } from 'react-hook-form';
-import React from 'react';
+import { ConnectedForm } from '../ConnectedForm';
 
 interface Props {
   property: string;
@@ -17,6 +16,7 @@ interface Props {
   endAdornment?: ReactNode;
   required?: boolean;
   fullWidth?: boolean;
+  min?: number;
 }
 
 export const InputNumber: React.FC<Props> = ({
@@ -26,6 +26,7 @@ export const InputNumber: React.FC<Props> = ({
   endAdornment = null,
   required = false,
   fullWidth = false,
+  min = undefined,
 }) => {
   return (
     <ConnectedForm>
@@ -46,6 +47,9 @@ export const InputNumber: React.FC<Props> = ({
                 {label}
               </InputLabel>
               <OutlinedInput
+                inputProps={{
+                  min: min,
+                }}
                 type='number'
                 id={property}
                 label={label}

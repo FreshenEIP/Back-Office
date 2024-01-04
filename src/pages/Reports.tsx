@@ -21,14 +21,14 @@ import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { removeComment } from '../api/comments';
 import { removePost } from '../api/post';
-import { fetchReports } from '../api/reports';
 import { Image } from '../components/Image';
 import { CustomDialog } from '../components/Modal/CustomDialog';
 import { Chip as UserChip } from '../components/User/Chip';
 import { Report } from '../interface/report/report';
+import { useFetchReports } from '../query/Reports';
 import { useAppSelector } from '../redux/hooks';
 
 const Reports = () => {
@@ -37,8 +37,11 @@ const Reports = () => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [status, setStatus] = useState('');
-  const getReportList = useQuery(['reports', page, pageSize, status], () =>
-    fetchReports(logReducer.accessToken, page, pageSize, status),
+  const getReportList = useFetchReports(
+    logReducer.accessToken,
+    page,
+    pageSize,
+    status,
   );
   const { data, isLoading, isError, isRefetching } = getReportList;
 
@@ -68,7 +71,10 @@ const Reports = () => {
     },
   });
 
-  if (isError) return <div>Error ...</div>;
+  if (isError) return <div data-testid='reports-error'>Error...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='reports-loading'>Loading...</div>;
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -149,117 +155,110 @@ const Reports = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isLoading || isRefetching ? (
-                <></>
-              ) : (
-                data!.data.map((report: Report, idx: number) => {
-                  if (
-                    report.post ||
-                    report.comment ||
-                    report.status === 'closed'
-                  )
-                    return (
-                      <TableRow>
-                        <TableCell align='center'>
-                          <UserChip
-                            user={report.reporterUser}
-                            clickable={false}
-                          />
-                        </TableCell>
-                        <TableCell align='center'>
-                          <UserChip user={report.reportedUser} />
-                        </TableCell>
-                        <TableCell>
-                          {report.status === 'opened' ? (
-                            <Chip label='Opened' color='success' />
-                          ) : (
-                            <Chip label='Closed' color='error' />
+              {data!.data.map((report: Report, idx: number) => {
+                console.log(report);
+                if (report.post || report.comment || report.status === 'closed')
+                  return (
+                    <TableRow key={`report-${report._id}`}>
+                      <TableCell align='center'>
+                        <UserChip
+                          user={report.reporterUser}
+                          clickable={false}
+                        />
+                      </TableCell>
+                      <TableCell align='center'>
+                        <UserChip user={report.reportedUser} />
+                      </TableCell>
+                      <TableCell>
+                        {report.status === 'opened' ? (
+                          <Chip label='Opened' color='success' />
+                        ) : (
+                          <Chip label='Closed' color='error' />
+                        )}
+                      </TableCell>
+                      <TableCell>{report.type}</TableCell>
+                      <TableCell>Content</TableCell>
+                      <TableCell>
+                        <div>
+                          {dayjs(report.createdAt).format(
+                            'DD-MM-YYYY hh:mm:ss',
                           )}
-                        </TableCell>
-                        <TableCell>{report.type}</TableCell>
-                        <TableCell>Content</TableCell>
-                        <TableCell>
-                          <div>
-                            {dayjs(report.createdAt).format(
-                              'DD-MM-YYYY hh:mm:ss',
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {report.status === 'opened' ? (
-                            <>
-                              <CustomDialog
-                                header={`Supprimer ${report.type}`}
-                                trigger={
-                                  <Button variant={'outlined'} color='error'>
-                                    Delete
-                                  </Button>
-                                }
-                              >
-                                <div>
-                                  <Stack
-                                    justifyContent={'center'}
-                                    alignItems={'center'}
-                                    spacing={2}
-                                  >
-                                    <Typography>
-                                      Êtes-vous sure de vouloir supprimer ce{' '}
-                                      {report.type} ?
-                                    </Typography>
-                                    {report.type === 'comment' ? (
-                                      <>
-                                        <Typography>
-                                          {report.comment.message}
-                                        </Typography>
-                                        <Button
-                                          variant={'outlined'}
-                                          color='error'
-                                          onClick={() =>
-                                            handleConfirmation(
-                                              report.type,
-                                              report._id,
-                                              report.comment._id,
-                                              undefined,
-                                            )
-                                          }
-                                        >
-                                          Confirmer
-                                        </Button>
-                                      </>
-                                    ) : (
-                                      <>
-                                        {report.post.photos.map((url) => {
-                                          return <Image src={url} alt={url} />;
-                                        })}
-                                        <Button
-                                          variant={'outlined'}
-                                          color='error'
-                                          onClick={() =>
-                                            handleConfirmation(
-                                              report.type,
-                                              report._id,
-                                              undefined,
-                                              report.post._id,
-                                            )
-                                          }
-                                        >
-                                          Confirmer
-                                        </Button>
-                                      </>
-                                    )}
-                                  </Stack>
-                                </div>
-                              </CustomDialog>
-                            </>
-                          ) : (
-                            <></>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  else return '';
-                })
-              )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {report.status === 'opened' ? (
+                          <>
+                            <CustomDialog
+                              header={`Supprimer ${report.type}`}
+                              trigger={
+                                <Button variant={'outlined'} color='error'>
+                                  Delete
+                                </Button>
+                              }
+                            >
+                              <div>
+                                <Stack
+                                  justifyContent={'center'}
+                                  alignItems={'center'}
+                                  spacing={2}
+                                >
+                                  <Typography>
+                                    Êtes-vous sure de vouloir supprimer ce{' '}
+                                    {report.type} ?
+                                  </Typography>
+                                  {report.type === 'comment' ? (
+                                    <>
+                                      <Typography>
+                                        {report.comment.message}
+                                      </Typography>
+                                      <Button
+                                        variant={'outlined'}
+                                        color='error'
+                                        onClick={() =>
+                                          handleConfirmation(
+                                            report.type,
+                                            report._id,
+                                            report.comment._id,
+                                            undefined,
+                                          )
+                                        }
+                                      >
+                                        Confirmer
+                                      </Button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {report.post.photos.map((url) => {
+                                        return <Image src={url} alt={url} />;
+                                      })}
+                                      <Button
+                                        variant={'outlined'}
+                                        color='error'
+                                        onClick={() =>
+                                          handleConfirmation(
+                                            report.type,
+                                            report._id,
+                                            undefined,
+                                            report.post._id,
+                                          )
+                                        }
+                                      >
+                                        Confirmer
+                                      </Button>
+                                    </>
+                                  )}
+                                </Stack>
+                              </div>
+                            </CustomDialog>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                else return '';
+              })}
             </TableBody>
           </Table>
         </TableContainer>

@@ -2,10 +2,11 @@ import { Box, Button, Stack } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Form, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery } from 'react-query';
-import { fetchProfile, updateProfile } from '../api/profile';
+import { useMutation } from 'react-query';
+import { updateProfile } from '../api/profile';
 import { ConnectedForm } from '../components/ConnectedForm';
 import { InputString } from '../components/Input/InputString';
+import { useFetchProfile } from '../query/Profile';
 import logAction from '../redux/actions/logAction';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
@@ -53,11 +54,9 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   //@ts-ignore
   const logReducer = useAppSelector((state) => state.logReducer);
-  const getProfile = useQuery(['profile'], () =>
-    fetchProfile(logReducer.accessToken),
-  );
+  const getProfile = useFetchProfile(logReducer.accessToken);
 
-  const { data, isLoading, isError } = getProfile;
+  const { data, isLoading, isRefetching, isError } = getProfile;
 
   const { mutate } = useMutation(updateProfile, {
     onSuccess: async () => {
@@ -83,8 +82,10 @@ const Profile = () => {
     }
   }, [isLoading, data, methods, dispatch]);
 
-  if (isError) return <div>Error...</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div data-testid='profile-error'>Error...</div>;
+
+  if (isLoading || isRefetching)
+    return <div data-testid='profile-loading'>Loading...</div>;
 
   const onSubmit: SubmitHandler<FormValues> = (payload) => {
     const token = logReducer.accessToken;

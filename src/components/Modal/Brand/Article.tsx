@@ -36,6 +36,7 @@ export const Article: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
             <Stack direction={'row'} width='100%' spacing={2}>
               <Box width={'100%'}>
                 <InputNumber
+                  min={0}
                   fullWidth
                   required
                   property={`cost`}
@@ -44,6 +45,7 @@ export const Article: React.FC<Props> = ({ onSubmit, isUpdate = false }) => {
               </Box>
               <Box width={'100%'}>
                 <InputNumber
+                  min={0}
                   fullWidth
                   required
                   property={`water`}
