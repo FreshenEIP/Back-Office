@@ -14,7 +14,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -112,7 +111,6 @@ const Reports = () => {
           justifyContent={'space-between'}
           spacing={2}
         >
-          <TextField size='small' label='User ID'></TextField>
           <FormControl sx={{ 'min-width': '120px' }} size='small'>
             <InputLabel id='select-status-label'>Status</InputLabel>
             <Select
@@ -127,17 +125,6 @@ const Reports = () => {
               <MenuItem value={'closed'}>Closed</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            size='small'
-            select
-            label='Type'
-            sx={{ minWidth: '120px' }}
-          >
-            <MenuItem value=''>All</MenuItem>
-            <MenuItem value='user'>User</MenuItem>
-            <MenuItem value='post'>Post</MenuItem>
-            <MenuItem value='comment'>Comment</MenuItem>
-          </TextField>
         </Stack>
       </Toolbar>
       <Paper sx={{ width: '100%', overflow: 'hidden' }} elevation={0}>
